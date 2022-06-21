@@ -42,6 +42,22 @@ const Sidebar = () => {
                 Mines
               </p>
             </div>
+            <div>
+              <p
+                className='text-xl underline underline-offset-1 cursor-pointer inline'
+                onClick={() => navigate("/tower-legend")}
+              >
+                Tower Legend
+              </p>
+            </div>
+            <div>
+              <p
+                className='text-xl underline underline-offset-1 cursor-pointer inline'
+                onClick={() => navigate("/slot-machine")}
+              >
+                Slot Machine
+              </p>
+            </div>
           </div>
         </div>
       </div>

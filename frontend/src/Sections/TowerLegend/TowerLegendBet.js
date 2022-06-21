@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { CgClose, CgCheck } from "react-icons/cg";
 
-const MinesBet = ({ betting, setBetting }) => {
+const TowerLegendBet = ({ betting, setBetting }) => {
   const [bet, setBet] = useState(100);
   const [slider, setSlider] = useState(false);
 
@@ -79,7 +80,21 @@ const MinesBet = ({ betting, setBetting }) => {
         </div>
       </div>
       <div>
-        <span className='font-semibold opacity-80 text-lg'>Mines: 1</span>
+        <span className='flex gap-2 font-semibold opacity-80 text-lg'>
+          Type:
+          <div className='flex justify-center items-center border-2 border-white p-1.5 rounded'>
+            <CgClose color='red' size='14px' />
+          </div>
+          <div className='flex justify-center items-center border-2 border-white p-0.5 rounded'>
+            <CgCheck color='#4ade80' size='20px' />
+          </div>
+          <div className='flex justify-center items-center border-2 border-white p-0.5 rounded'>
+            <CgCheck color='#4ade80' size='20px' />
+          </div>
+          <div className='flex justify-center items-center border-2 border-white p-0.5 rounded'>
+            <CgCheck color='#4ade80' size='20px' />
+          </div>
+        </span>
       </div>
       <button
         className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
@@ -91,4 +106,4 @@ const MinesBet = ({ betting, setBetting }) => {
   );
 };
 
-export default MinesBet;
+export default TowerLegendBet;

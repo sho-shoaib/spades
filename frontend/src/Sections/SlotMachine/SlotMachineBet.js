@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const MinesBet = ({ betting, setBetting }) => {
+const SlotMachineBet = ({ betting, setBetting }) => {
   const [bet, setBet] = useState(100);
   const [slider, setSlider] = useState(false);
 
@@ -78,17 +78,14 @@ const MinesBet = ({ betting, setBetting }) => {
           <span>Max</span>
         </div>
       </div>
-      <div>
-        <span className='font-semibold opacity-80 text-lg'>Mines: 1</span>
-      </div>
       <button
         className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
         onClick={sendMyBet}
       >
-        {betting ? "Cash Out" : "Bet"}
+        {betting ? "Cash Out" : "Spin"}
       </button>
     </div>
   );
 };
 
-export default MinesBet;
+export default SlotMachineBet;
