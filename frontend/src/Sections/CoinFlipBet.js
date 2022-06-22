@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 
-const CoinFlipBet = ({ loading, sendMyChoice, betting, executeBet }) => {
-  const [bet, setBet] = useState(100);
+const CoinFlipBet = ({
+  loading,
+  sendMyChoice,
+  betting,
+  executeBet,
+  bet,
+  setBet,
+}) => {
   const [slider, setSlider] = useState(false);
 
   return (

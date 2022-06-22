@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-const MinesBet = ({ betting, setBetting }) => {
-  const [bet, setBet] = useState(100);
+const MinesBet = ({ betting, setBetting, bet, setBet }) => {
   const [slider, setSlider] = useState(false);
 
   const sendMyBet = () => {

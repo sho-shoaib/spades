@@ -23,7 +23,7 @@ const io = new Server(server, {
   },
 });
 
-let bets = [];
+let crashBets = [];
 let refershBets = false;
 var crashAt = 1;
 let gameEnd = false;
@@ -35,15 +35,18 @@ io.on("connection", (socket) => {
   console.log(`user connected ${socket.id}`);
 
   socket.on("send_bet", (data) => {
-    bets.push(data);
-    socket.broadcast.emit("receive_message", bets);
-    socket.emit("receive_message", bets);
+    crashBets.push(data);
+    socket.broadcast.emit("receive_message", crashBets);
   });
 
   socket.on("cancel_bet", (data) => {
-    bets.pop(data);
-    socket.broadcast.emit("receive_message", bets);
-    socket.emit("receive_message", bets);
+    crashBets.pop(data);
+    socket.broadcast.emit("receive_message", crashBets);
+  });
+
+  socket.on("join_room", (roomname) => {
+    socket.join(roomname);
+    socket.emit("joined", { crashBets });
   });
 
   const startGame = () => {
@@ -51,7 +54,7 @@ io.on("connection", (socket) => {
     var seed = Math.random().toString().slice(2, -1);
     var salt = Math.random().toString().slice(2, -1);
     crashAt = crashResFinder(seed, salt);
-    console.log(crashAt);
+    // console.log(crashAt);
     let i = 1;
     function myLoop() {
       setTimeout(() => {
@@ -77,6 +80,48 @@ io.on("connection", (socket) => {
     myLoop();
   };
   startGame();
+
+  // coinFlip
+  socket.on("join coinFlip", () => {
+    socket.join("coinFlip");
+  });
+  socket.on("post coinFlip result", (data) => {
+    const { userChoice, userBetAmt } = data;
+    let num = Math.random();
+    let result = "";
+
+    if (num < 0.5) {
+      result = "HEAD";
+    } else {
+      result = "TAIL";
+    }
+
+    if (userChoice === result) {
+      socket.emit("get coinFlip result", {
+        userChoice,
+        status: "WON",
+        serverChoice: result,
+        betting: true,
+      });
+    } else {
+      socket.emit("get coinFlip result", {
+        userChoice,
+        status: "LOST",
+        serverChoice: result,
+        betting: false,
+      });
+    }
+  });
+
+  // Mines
+  socket.on("join mines", () => {
+    socket.join("mines");
+  });
+
+  socket.on("post mines data", (data) => {
+    const { userBet } = data;
+    socket.emit("start", { beginGame: true });
+  });
 });
 
 app.get("/crash", (req, res) => {
@@ -84,33 +129,6 @@ app.get("/crash", (req, res) => {
     status: "success",
     bets,
   });
-});
-
-app.post("/coin-flip", (req, res) => {
-  const { choice } = req.body;
-
-  let num = Math.random();
-  let result = "";
-
-  if (num < 0.5) {
-    result = "HEAD";
-  } else {
-    result = "TAIL";
-  }
-
-  if (choice === result) {
-    res.status(200).json({
-      status: "WON",
-      result,
-      yourChoice: choice,
-    });
-  } else {
-    res.status(200).json({
-      status: "LOST",
-      result,
-      yourChoice: choice,
-    });
-  }
 });
 
 server.listen(port, () => {

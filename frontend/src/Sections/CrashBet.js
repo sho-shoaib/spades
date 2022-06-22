@@ -1,28 +1,7 @@
 import React, { useState } from "react";
-import { socket } from "../App";
 
-const CrashBet = () => {
-  const [bet, setBet] = useState(1);
+const CrashBet = ({ sendMyBet, betting, setBetting, bet, setBet }) => {
   const [slider, setSlider] = useState(false);
-  const [betting, setBetting] = useState(false);
-
-  const sendMyBet = () => {
-    if (!betting) {
-      setBetting(true);
-      socket.emit("send_bet", {
-        name: "shoaib",
-        bet: bet,
-        cancel: false,
-      });
-    } else if (betting) {
-      setBetting(false);
-      socket.emit("cancel_bet", {
-        name: "shoaib",
-        bet: bet,
-        cancel: true,
-      });
-    }
-  };
 
   return (
     <div className='flex flex-col justify-center items-center h-full gap-10'>
