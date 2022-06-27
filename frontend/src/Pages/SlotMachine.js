@@ -11,8 +11,8 @@ const SlotMachine = () => {
   const [jackpot, setJackpot] = useState(false);
   const [equalTerms, setEqualTerms] = useState(0);
 
-  const sendMyBet = () => {
-    if (!betting) {
+  const sendMyBet = (toBet, toCashOut) => {
+    if (toBet) {
       setBetting(true);
       socket.emit("get slotMachine data", { bet });
       socket.on("recieve tower data", (data) => {
@@ -21,7 +21,7 @@ const SlotMachine = () => {
         setJackpot(data.jackpot);
         setEqualTerms(data.equalterms);
       });
-    } else if (betting) {
+    } else if (toCashOut) {
       setBetting(false);
     }
   };

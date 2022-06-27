@@ -20,6 +20,8 @@ const TowerLegend = () => {
   const [game, setGame] = useState(0);
   const [checkWhat, setCheckWhat] = useState();
   const [loading, setLoading] = useState(false);
+  const [gameEnd, setGameEnd] = useState(false);
+  const [looseText, setLooseText] = useState("");
 
   useEffect(() => {
     socket.emit("join_room", { roomName: "tower-legend" });
@@ -28,6 +30,8 @@ const TowerLegend = () => {
   const sendMyBet = () => {
     if (!betting) {
       setLoading(true);
+      setLooseText("");
+      setGameEnd(false);
       setGame((prev) => prev + 1);
       setBetting(true);
       socket.emit("get tower data", {
@@ -67,6 +71,10 @@ const TowerLegend = () => {
           checkWhat={checkWhat}
           loading={loading}
           game={game}
+          setGameEnd={setGameEnd}
+          gameEnd={gameEnd}
+          setLooseText={setLooseText}
+          looseText={looseText}
         />
       </div>
     </div>

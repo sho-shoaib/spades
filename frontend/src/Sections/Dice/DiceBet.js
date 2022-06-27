@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 
-const SlotMachineBet = ({
-  betting,
-  setBetting,
-  bet,
-  setBet,
-  sendMyBet,
-  lost,
-}) => {
+const DiceBet = ({ betting, bet, setBet, sendMyBet }) => {
   const [slider, setSlider] = useState(false);
-
   return (
     <div className='flex flex-col justify-top items-center h-full gap-8 py-10'>
       <div>
@@ -32,7 +24,9 @@ const SlotMachineBet = ({
               className='rounded-l-full'
               onClick={() => {
                 setBet((prevValue) =>
-                  prevValue === 200 || prevValue * 2 > 200 ? 200 : prevValue * 2
+                  prevValue === 99999 || prevValue * 2 > 99999
+                    ? 99999
+                    : prevValue * 2
                 );
               }}
             >
@@ -57,7 +51,9 @@ const SlotMachineBet = ({
             </button>
           </div>
         </div>
-        <span className='text-white opacity-80 ml-4'>Bet range: 100 - 200</span>
+        <span className='text-white opacity-80 ml-4'>
+          Bet range: 100 - 99999
+        </span>
         <div
           className={`flex items-center gap-1.5 ml-4 ${
             slider ? "visible" : "hidden"
@@ -69,7 +65,7 @@ const SlotMachineBet = ({
             type='range'
             style={{ transform: "translateY(1px)" }}
             min={100}
-            max={200}
+            max={99999}
             value={bet}
             onChange={(e) => setBet(e.target.value)}
           />
@@ -77,22 +73,13 @@ const SlotMachineBet = ({
         </div>
       </div>
       <button
-        className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72 disabled:opacity-70'
-        onClick={() => sendMyBet(true, false)}
-        disabled={!betting || lost}
-      >
-        Spin again
-      </button>
-      <button
         className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
-        onClick={() =>
-          betting ? sendMyBet(false, true) : sendMyBet(true, false)
-        }
+        onClick={sendMyBet}
       >
-        {betting ? "Cash Out" : "Spin"}
+        Roll Now
       </button>
     </div>
   );
 };
 
-export default SlotMachineBet;
+export default DiceBet;

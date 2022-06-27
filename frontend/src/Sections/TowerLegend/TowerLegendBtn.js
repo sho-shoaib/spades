@@ -12,6 +12,8 @@ const TowerLegendBtn = ({
   setCurrRow,
   currRow,
   game,
+  setGameEnd,
+  setLooseText,
 }) => {
   const [res, setRes] = useState("slate");
 
@@ -29,6 +31,11 @@ const TowerLegendBtn = ({
     } else {
       setCurrRow(currRow - 1);
       setRes("green");
+    }
+    if (currRow === 1) {
+      setBetting(false);
+      setGameEnd(true);
+      setLooseText("Congratulations! You Won");
     }
   };
 

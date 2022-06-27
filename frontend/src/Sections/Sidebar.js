@@ -64,6 +64,14 @@ const Sidebar = () => {
                 Slot Machine
               </p>
             </div>
+            <div>
+              <p
+                className='text-xl underline underline-offset-1 cursor-pointer inline'
+                onClick={() => handleClick("dice")}
+              >
+                Dice
+              </p>
+            </div>
           </div>
         </div>
       </div>

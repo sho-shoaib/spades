@@ -7,6 +7,7 @@ import io from "socket.io-client";
 import Mines from "./Pages/Mines";
 import TowerLegend from "./Pages/TowerLegend";
 import SlotMachine from "./Pages/SlotMachine";
+import Dice from "./Pages/Dice";
 
 export const socket = io.connect("http://localhost:3001");
 
@@ -22,6 +23,7 @@ function App() {
           <Route path='/mines' element={<Mines />} />
           <Route path='/tower-legend' element={<TowerLegend />} />
           <Route path='slot-machine' element={<SlotMachine />} />
+          <Route path='/dice' element={<Dice />} />
         </Routes>
       </div>
     </BrowserRouter>
