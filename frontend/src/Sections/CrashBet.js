@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const CrashBet = ({ sendMyBet, betting, setBetting, bet, setBet }) => {
+const CrashBet = ({ sendMyBet, betting, bet, setBet, gameStarting }) => {
   const [slider, setSlider] = useState(false);
 
   return (
@@ -9,10 +9,21 @@ const CrashBet = ({ sendMyBet, betting, setBetting, bet, setBet }) => {
         className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
         onClick={sendMyBet}
       >
-        {betting ? (
+        {/* {betting ? (
           <>
             <p className='-mb-0.5'>Loading...</p>
             <p>(cancel)</p>
+          </>
+        ) : (
+          <>
+            <p className='-mb-0.5'>Bet</p>
+            <p>Next Round</p>
+          </>
+        )} */}
+
+        {gameStarting ? (
+          <>
+            <p className='py-3 text-md'>Bet</p>
           </>
         ) : (
           <>

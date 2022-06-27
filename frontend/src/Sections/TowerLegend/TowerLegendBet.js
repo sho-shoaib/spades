@@ -1,17 +1,8 @@
 import React, { useState } from "react";
 import { CgClose, CgCheck } from "react-icons/cg";
 
-const TowerLegendBet = ({ betting, setBetting }) => {
-  const [bet, setBet] = useState(100);
+const TowerLegendBet = ({ betting, sendMyBet, bet, setBet }) => {
   const [slider, setSlider] = useState(false);
-
-  const sendMyBet = () => {
-    if (!betting) {
-      setBetting(true);
-    } else if (betting) {
-      setBetting(false);
-    }
-  };
 
   return (
     <div className='flex flex-col justify-top items-center h-full gap-8 py-10'>
@@ -98,7 +89,7 @@ const TowerLegendBet = ({ betting, setBetting }) => {
       </div>
       <button
         className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
-        onClick={sendMyBet}
+        onClick={() => sendMyBet()}
       >
         {betting ? "Cash Out" : "Bet"}
       </button>

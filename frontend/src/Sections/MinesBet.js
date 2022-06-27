@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 
-const MinesBet = ({ betting, setBetting, bet, setBet }) => {
+const MinesBet = ({ betting, bet, setBet, sendMyBet }) => {
   const [slider, setSlider] = useState(false);
-
-  const sendMyBet = () => {
-    if (!betting) {
-      setBetting(true);
-    } else if (betting) {
-      setBetting(false);
-    }
-  };
 
   return (
     <div className='flex flex-col justify-top items-center h-full gap-8 py-10'>

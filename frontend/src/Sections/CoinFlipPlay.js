@@ -15,8 +15,8 @@ const CoinFlipPlay = ({ loading, displayData }) => {
         <div className='flex flex-col items-center gap-10'>
           <p className='text-4xl font-semibold'>You {displayData.status}</p>
           <div className='flex child:text-2xl font-semibold gap-10'>
-            <p>Your choice: {displayData.yourChoice}</p>
-            <p>Outcome: {displayData.result}</p>
+            <p>Your choice: {displayData.userChoice}</p>
+            <p>Outcome: {displayData.serverChoice}</p>
           </div>
         </div>
       )}

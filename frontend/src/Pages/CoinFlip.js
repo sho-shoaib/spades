@@ -12,11 +12,10 @@ const CoinFlip = () => {
 
   // join room
   useEffect(() => {
-    socket.emit("join coinFlip");
+    socket.emit("join_room", { roomName: "coinFlip" });
   }, []);
 
   useEffect(() => {
-    console.log("hey");
     socket.on("get coinFlip result", (data) => {
       setDisplayData(data);
       setTimeout(() => {

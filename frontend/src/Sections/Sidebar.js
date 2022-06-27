@@ -1,8 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../App";
 
 const Sidebar = () => {
   let navigate = useNavigate();
+
+  const handleClick = (roomName) => {
+    navigate(`/${roomName}`);
+    socket.emit("join_room", { roomName });
+  };
 
   return (
     <div className='h-screen bg-slate-900' style={{ width: "300px" }}>
@@ -21,7 +27,7 @@ const Sidebar = () => {
             <div>
               <p
                 className='text-xl underline underline-offset-1 cursor-pointer inline'
-                onClick={() => navigate("/crash")}
+                onClick={() => handleClick("crash")}
               >
                 Crash
               </p>
@@ -29,7 +35,7 @@ const Sidebar = () => {
             <div>
               <p
                 className='text-xl underline underline-offset-1 cursor-pointer inline'
-                onClick={() => navigate("/coinflip")}
+                onClick={() => handleClick("coinflip")}
               >
                 CoinFlip
               </p>
@@ -37,7 +43,7 @@ const Sidebar = () => {
             <div>
               <p
                 className='text-xl underline underline-offset-1 cursor-pointer inline'
-                onClick={() => navigate("/mines")}
+                onClick={() => handleClick("mines")}
               >
                 Mines
               </p>
@@ -45,7 +51,7 @@ const Sidebar = () => {
             <div>
               <p
                 className='text-xl underline underline-offset-1 cursor-pointer inline'
-                onClick={() => navigate("/tower-legend")}
+                onClick={() => handleClick("tower-legend")}
               >
                 Tower Legend
               </p>
@@ -53,7 +59,7 @@ const Sidebar = () => {
             <div>
               <p
                 className='text-xl underline underline-offset-1 cursor-pointer inline'
-                onClick={() => navigate("/slot-machine")}
+                onClick={() => handleClick("slot-machine")}
               >
                 Slot Machine
               </p>

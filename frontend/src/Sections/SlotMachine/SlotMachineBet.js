@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 
-const SlotMachineBet = ({ betting, setBetting }) => {
-  const [bet, setBet] = useState(100);
+const SlotMachineBet = ({
+  betting,
+  setBetting,
+  bet,
+  setBet,
+  sendMyBet,
+  lost,
+}) => {
   const [slider, setSlider] = useState(false);
-
-  const sendMyBet = () => {
-    if (!betting) {
-      setBetting(true);
-    } else if (betting) {
-      setBetting(false);
-    }
-  };
 
   return (
     <div className='flex flex-col justify-top items-center h-full gap-8 py-10'>
@@ -78,6 +76,14 @@ const SlotMachineBet = ({ betting, setBetting }) => {
           <span>Max</span>
         </div>
       </div>
+      {!lost && (
+        <button
+          className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
+          onClick={sendMyBet}
+        >
+          Spin again
+        </button>
+      )}
       <button
         className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
         onClick={sendMyBet}
