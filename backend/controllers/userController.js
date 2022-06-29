@@ -15,6 +15,7 @@ module.exports.signup = async(req, res)=>{
 
 module.exports.login = async(req, res)=> {
         const{email, password} = req.body;
+        console.log('POST /login'+ " API Call fromc" + email);
         try{
             const user = await User.findOne(
                 { email },
@@ -28,12 +29,18 @@ module.exports.login = async(req, res)=> {
 
               if (user){
                 if(user.password == password){
+                  console.log(200)
                     return res
                     .status(200)
                     .send({         
                         _id: user._id,
                         email: user.email,
                         name: user.name,})
+                } else{
+                  console.log(500)
+                  return res
+                  .status(500)
+                  .send({msg: "Wrong Password"})
                 }
               }
         } catch(err){return res.status(500).send({error: err})}
@@ -68,6 +75,9 @@ module.exports.makeBet = async(req, res)=>{
             await admin.save();
             return res.status(200).send("Bet Successfull")
             }
+            }
+            if(!user){
+              return res.status(500).send({msg: "No User with that email"})
             }
           } catch(err){return res.status(500).send({error: err})}
 }

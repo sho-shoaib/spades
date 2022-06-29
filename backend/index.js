@@ -12,7 +12,7 @@ const apiRouter = require("./routes/index");
 
 
 //db connection starts here
-(async ()=>{
+(async () => {
   try{
   mongoose.connect('mongodb://spades:spades@cluster0-shard-00-00.izwi8.mongodb.net:27017,cluster0-shard-00-01.izwi8.mongodb.net:27017,cluster0-shard-00-02.izwi8.mongodb.net:27017/mydb?ssl=true&replicaSet=atlas-sndbks-shard-0&authSource=admin&retryWrites=true&w=majority',
   {
@@ -21,7 +21,7 @@ const apiRouter = require("./routes/index");
   }
 );
 console.log('Connected to database');
-  }catch(err){console.log('DB connection failed')}
+  } catch(err){console.log('DB connection failed')}
 })()
 
 
