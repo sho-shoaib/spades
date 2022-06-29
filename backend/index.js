@@ -7,7 +7,7 @@ var CryptoJS = require("crypto-js");
 const crypto = require("crypto");
 const mongoose = require("mongoose");
 const apiRouter = require("./routes/index");
-
+const axios = require('axios');
 //db connection starts here
 (async () => {
   try {
@@ -184,6 +184,10 @@ io.on("connection", (socket) => {
 
   // Bets
   socket.on("send_bet", ({ roomName, data }) => {
+    axios.post('http://localhost:3001/user/user/makebet/', {
+      email: data.userEmail,
+      amount: data.betAmt
+    })
     if (roomName === "crash") {
       crashBets.push(data);
     }
@@ -198,7 +202,7 @@ io.on("connection", (socket) => {
 
   // Coin flip
   socket.on("post coinFlip result", (data) => {
-    const { userChoice, userBetAmt } = data;
+    const { userChoice, userBetAmt, userEmail } = data;
     let num = Math.random();
     let result = "";
 
@@ -215,6 +219,10 @@ io.on("connection", (socket) => {
         serverChoice: result,
         betting: true,
       });
+      axios.post('http://localhost:3001/user/user/givewin/', {
+        email: userEmail,
+        amount: (userBetAmt*1.98)
+      })
     } else {
       socket.emit("get coinFlip result", {
         userChoice,
@@ -224,7 +232,13 @@ io.on("connection", (socket) => {
       });
     }
   });
-
+  socket.on("send_reward", (data)=>{
+    console.log(data)
+    axios.post('http://localhost:3001/user/user/givewin', {
+      email: data.userEmail,
+      amount: data.betAmt
+    })
+  });
   // Mines
   socket.on("get mines data", () => {
     function createNums(allNums, hash) {

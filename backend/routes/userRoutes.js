@@ -6,5 +6,5 @@ UserRouter.post("/signup", signup);
 UserRouter.post("/login", login);
 UserRouter.post("/makebet", makeBet);
 UserRouter.post("/givewin", givewin);
-UserRouter.get("/getbalance/:email",getBalance )
+UserRouter.get("/getbalance/:email", getBalance )
 module.exports = UserRouter;

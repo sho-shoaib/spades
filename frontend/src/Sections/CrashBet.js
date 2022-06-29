@@ -45,7 +45,7 @@ const CrashBet = ({
       {betting && gameRunning && (
         <button
           className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
-          onClick={cashOut}
+          onClick={()=>{cashOut(parseFloat(bet) * parseFloat(crashNo))}}
         >
           <p className='text-2xl'>Cash Out</p>
           <p className='text-2xl'>({parseFloat(bet) * parseFloat(crashNo)})</p>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdNavigation } from "react-icons/md";
+import { socket } from "../../App";
 var CryptoJS = require("crypto-js");
 
 const TowerLegendBtn = ({
@@ -14,10 +15,12 @@ const TowerLegendBtn = ({
   game,
   setGameEnd,
   setLooseText,
+  bet
 }) => {
   const [res, setRes] = useState("slate");
 
   const checkIf = (clickedOn, row) => {
+    let checked = 0;
     if (
       clickedOn ===
       parseInt(
@@ -31,6 +34,15 @@ const TowerLegendBtn = ({
     } else {
       setCurrRow(currRow - 1);
       setRes("green");
+ /*      checked++
+      if(checked == 9){
+        socket.emit("send_reward", {
+          data: {
+            userEmail: sessionStorage.useremail,
+            betAmt: bet
+          }
+        })
+      } */
     }
     if (currRow === 1) {
       setBetting(false);

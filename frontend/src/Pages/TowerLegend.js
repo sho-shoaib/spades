@@ -80,6 +80,7 @@ const TowerLegend = () => {
           gameEnd={gameEnd}
           setLooseText={setLooseText}
           looseText={looseText}
+          bet={bet}
         />
       </div>
     </div>

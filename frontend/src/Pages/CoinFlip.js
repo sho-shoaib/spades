@@ -41,6 +41,7 @@ const CoinFlip = () => {
       socket.emit("post coinFlip result", {
         userChoice: choice,
         userBetAmt: bet,
+        userEmail: userEmail
       });
     }
   };

@@ -52,8 +52,12 @@ const CrashGame = () => {
     }
   };
 
-  const cashOut = () => {
+  const cashOut = (amt) => {
     setBetting(false);
+    socket.emit("send_reward", {
+      userEmail: userEmail,
+      betAmt: amt
+    });
   };
 
   return (
