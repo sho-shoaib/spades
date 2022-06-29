@@ -15,7 +15,7 @@ const CrashBetsDisplay = ({ betsArr, setBetsArr }) => {
   // }, [socket]);
 
   return (
-    <div>
+    <div className=''>
       {betsArr !== undefined &&
         betsArr.map(({ name, bet }, i) => {
           return (

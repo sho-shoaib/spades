@@ -40,7 +40,7 @@ const CoinFlip = () => {
   };
 
   return (
-    <div className='flex w-full py-10 px-5 gap-1'>
+    <div className='flex w-full py-10 px-5 gap-1 h-screen'>
       <div className='bg-slate-700 rounded-l-xl' style={{ width: "30%" }}>
         <CoinFlipBet
           loading={loading}
