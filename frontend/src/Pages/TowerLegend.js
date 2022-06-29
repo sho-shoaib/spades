@@ -15,6 +15,7 @@ function makeid(length) {
 }
 
 const TowerLegend = () => {
+  const userEmail = sessionStorage.useremail;
   const [betting, setBetting] = useState(false);
   const [bet, setBet] = useState(100);
   const [game, setGame] = useState(0);

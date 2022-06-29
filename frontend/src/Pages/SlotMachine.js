@@ -4,6 +4,7 @@ import SlotMachineBet from "../Sections/SlotMachine/SlotMachineBet";
 import SlotMachinePlay from "../Sections/SlotMachine/SlotMachinePlay";
 
 const SlotMachine = () => {
+  const userEmail = sessionStorage.useremail;
   const [betting, setBetting] = useState(false);
   const [bet, setBet] = useState(100);
   const [fruits, setFruits] = useState(["Apple", "Banana", "Cherry"]);

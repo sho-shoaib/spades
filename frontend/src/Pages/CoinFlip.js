@@ -5,6 +5,7 @@ import CoinFlipPlay from "../Sections/CoinFlipPlay";
 import axios from "axios";
 
 const CoinFlip = () => {
+  const userEmail = sessionStorage.useremail;
   const [loading, setLoading] = useState(false);
   const [displayData, setDisplayData] = useState();
   const [betting, setBetting] = useState(false);

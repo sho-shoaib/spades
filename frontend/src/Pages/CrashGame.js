@@ -5,13 +5,14 @@ import CrashBet from "../Sections/CrashBet";
 import CrashBetsDisplay from "../Sections/CrashBetsDisplay";
 
 const CrashGame = () => {
+  const userEmail = sessionStorage.useremail;
   const [betsArr, setBetsArr] = useState();
   const [betting, setBetting] = useState(false);
   const [bet, setBet] = useState(1);
   const [crashAt, setCrashAt] = useState();
   const [gameEnd, setGameEnd] = useState(false);
-  const [canBet, setCanBet] = useState();
-  const [gameRunning, setGameRunning] = useState();
+  const [canBet, setCanBet] = useState(true);
+  const [gameRunning, setGameRunning] = useState(false);
 
   useEffect(() => {
     socket.emit("join_room", { roomName: "crash" });
@@ -21,7 +22,6 @@ const CrashGame = () => {
     socket.on("crash_data", (data) => {
       setCrashAt(data.curr);
       setGameEnd(data.end);
-      setGameStarting(data.starting);
       setBetsArr(data.crashBets);
       setCanBet(data.canBet);
       setGameRunning(data.gameRunning);

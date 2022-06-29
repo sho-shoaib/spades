@@ -4,6 +4,7 @@ import MinesPlay from "../Sections/MinesPlay";
 import { socket } from "../App";
 
 const Mines = () => {
+  const userEmail = sessionStorage.useremail;
   const [betting, setBetting] = useState(false);
   const [bet, setBet] = useState(100);
   const [checkWhat, setCheckWhat] = useState();

@@ -4,6 +4,7 @@ import DiceBet from "../Sections/Dice/DiceBet";
 import DicePlay from "../Sections/Dice/DicePlay";
 
 const Dice = () => {
+  const userEmail = sessionStorage.useremail;
   const [betting, setBetting] = useState(false);
   const [bet, setBet] = useState(100);
   const [checkWhat, setCheckWhat] = useState();
