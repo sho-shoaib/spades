@@ -19,7 +19,7 @@ module.exports.login = async(req, res)=> {
         try{
             const user = await User.findOne(
                 { email },
-                'email password'
+                'email password name'
               );
               if (!user) {
                 return res
@@ -36,7 +36,7 @@ module.exports.login = async(req, res)=> {
                         _id: user._id,
                         email: user.email,
                         name: user.name,})
-                } else{
+                } else {
                   console.log(500)
                   return res
                   .status(500)
