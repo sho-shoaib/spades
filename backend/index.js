@@ -8,23 +8,21 @@ const crypto = require("crypto");
 const mongoose = require("mongoose");
 const apiRouter = require("./routes/index");
 
-
-
-
 //db connection starts here
 (async () => {
-  try{
-  mongoose.connect('mongodb://spades:spades@cluster0-shard-00-00.izwi8.mongodb.net:27017,cluster0-shard-00-01.izwi8.mongodb.net:27017,cluster0-shard-00-02.izwi8.mongodb.net:27017/mydb?ssl=true&replicaSet=atlas-sndbks-shard-0&authSource=admin&retryWrites=true&w=majority',
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+  try {
+    mongoose.connect(
+      "mongodb://spades:spades@cluster0-shard-00-00.izwi8.mongodb.net:27017,cluster0-shard-00-01.izwi8.mongodb.net:27017,cluster0-shard-00-02.izwi8.mongodb.net:27017/mydb?ssl=true&replicaSet=atlas-sndbks-shard-0&authSource=admin&retryWrites=true&w=majority",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
+    console.log("Connected to database");
+  } catch (err) {
+    console.log("DB connection failed");
   }
-);
-console.log('Connected to database');
-  } catch(err){console.log('DB connection failed')}
-})()
-
-
+})();
 
 //db code ends here
 
@@ -35,7 +33,7 @@ const fruits = ["Apple", "Banana", "Cherry"];
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/user', apiRouter)
+app.use("/user", apiRouter);
 
 const port = 3001;
 
@@ -52,8 +50,8 @@ const io = new Server(server, {
 
 let crashBets = [];
 let refershBets = false;
-let gameStart;
 let crash_sendData;
+let canBet;
 
 // Make random string
 function makeid(length) {
@@ -80,8 +78,9 @@ const startGame = () => {
       crash_sendData = {
         curr: `Bang @ ${i.toFixed(2)} x`,
         end: false,
-        starting: false,
         crashBets,
+        canBet: false,
+        gameRunning: true,
       };
 
       if (i < crashAt) {
@@ -90,8 +89,9 @@ const startGame = () => {
         crash_sendData = {
           curr: `Bang @ ${i.toFixed(2)} x`,
           end: true,
-          starting: false,
           crashBets,
+          canBet: false,
+          gameRunning: false,
         };
         gameStart = false;
         setTimeout(() => {
@@ -112,8 +112,9 @@ const runUp = () => {
       crash_sendData = {
         curr: `Game start in ${i.toFixed(1)} s`,
         end: false,
-        starting: true,
         crashBets,
+        canBet: true,
+        gameRunning: false,
       };
 
       if (i >= 0.1) {

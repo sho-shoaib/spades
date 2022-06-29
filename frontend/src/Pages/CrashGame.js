@@ -10,7 +10,8 @@ const CrashGame = () => {
   const [bet, setBet] = useState(1);
   const [crashAt, setCrashAt] = useState();
   const [gameEnd, setGameEnd] = useState(false);
-  const [gameStarting, setGameStarting] = useState();
+  const [canBet, setCanBet] = useState();
+  const [gameRunning, setGameRunning] = useState();
 
   useEffect(() => {
     socket.emit("join_room", { roomName: "crash" });
@@ -22,21 +23,33 @@ const CrashGame = () => {
       setGameEnd(data.end);
       setGameStarting(data.starting);
       setBetsArr(data.crashBets);
+      setCanBet(data.canBet);
+      setGameRunning(data.gameRunning);
     });
   }, [socket]);
 
   const sendMyBet = () => {
-    if (!betting) {
+    if (!betting && canBet) {
       setBetting(true);
       socket.emit("send_bet", {
         roomName: "crash",
-        data: { name: "shoaib", bet: bet, cancel: false, betting: true },
+        data: {
+          name: sessionStorage.username,
+          bet: bet,
+          cancel: false,
+          betting: true,
+        },
       });
     } else if (betting) {
       setBetting(false);
       socket.emit("cancel_bet", {
         roomName: "crash",
-        data: { name: "shoaib", bet: bet, cancel: true, betting: false },
+        data: {
+          name: sessionStorage.username,
+          bet: bet,
+          cancel: true,
+          betting: false,
+        },
       });
     }
   };
@@ -61,7 +74,8 @@ const CrashGame = () => {
           setBetting={setBetting}
           bet={bet}
           setBet={setBet}
-          gameStarting={gameStarting}
+          canBet={canBet}
+          gameRunning={gameRunning}
         />
       </div>
     </div>

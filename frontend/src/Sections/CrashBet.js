@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const CrashBet = ({ sendMyBet, betting, bet, setBet, gameStarting }) => {
+const CrashBet = ({ sendMyBet, betting, bet, setBet, canBet, gameRunning }) => {
   const [slider, setSlider] = useState(false);
 
   return (
@@ -21,7 +21,7 @@ const CrashBet = ({ sendMyBet, betting, bet, setBet, gameStarting }) => {
           </>
         )} */}
 
-        {gameStarting ? (
+        {canBet ? (
           <>
             <p className='py-3 text-md'>Bet</p>
           </>
