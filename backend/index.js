@@ -81,6 +81,7 @@ const startGame = () => {
         crashBets,
         canBet: false,
         gameRunning: true,
+        no: i.toFixed(2),
       };
 
       if (i < crashAt) {
@@ -92,6 +93,7 @@ const startGame = () => {
           crashBets,
           canBet: false,
           gameRunning: false,
+          no: i.toFixed(2),
         };
         gameStart = false;
         setTimeout(() => {

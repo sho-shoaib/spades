@@ -1,15 +1,24 @@
 import React, { useState } from "react";
 
-const CrashBet = ({ sendMyBet, betting, bet, setBet, canBet, gameRunning }) => {
+const CrashBet = ({
+  sendMyBet,
+  betting,
+  bet,
+  setBet,
+  canBet,
+  gameRunning,
+  crashNo,
+  cashOut,
+}) => {
   const [slider, setSlider] = useState(false);
-
   return (
     <div className='flex flex-col justify-center items-center h-full gap-10 '>
-      <button
-        className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
-        onClick={sendMyBet}
-      >
-        {/* {betting ? (
+      {!betting && (
+        <button
+          className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
+          onClick={sendMyBet}
+        >
+          {/* {betting ? (
           <>
             <p className='-mb-0.5'>Loading...</p>
             <p>(cancel)</p>
@@ -21,17 +30,27 @@ const CrashBet = ({ sendMyBet, betting, bet, setBet, canBet, gameRunning }) => {
           </>
         )} */}
 
-        {canBet ? (
-          <>
-            <p className='py-3 text-md'>Bet</p>
-          </>
-        ) : (
-          <>
-            <p className='-mb-0.5'>Bet</p>
-            <p>Next Round</p>
-          </>
-        )}
-      </button>
+          {canBet ? (
+            <>
+              <p className='py-3 text-md'>Bet</p>
+            </>
+          ) : (
+            <>
+              <p className='-mb-0.5'>Bet</p>
+              <p>Next Round</p>
+            </>
+          )}
+        </button>
+      )}
+      {betting && gameRunning && (
+        <button
+          className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
+          onClick={cashOut}
+        >
+          <p className='text-2xl'>Cash Out</p>
+          <p className='text-2xl'>({parseFloat(bet) * parseFloat(crashNo)})</p>
+        </button>
+      )}
       <div>
         <span className='text-white opacity-80 ml-4'>Bet range: 1 - 2000</span>
         <div className='relative w-72 mt-0.5 mb-0.5'>

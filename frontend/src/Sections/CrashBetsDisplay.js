@@ -17,10 +17,10 @@ const CrashBetsDisplay = ({ betsArr, setBetsArr }) => {
   return (
     <div className=''>
       {betsArr !== undefined &&
-        betsArr.map(({ name, bet }, i) => {
+        betsArr.map(({ userName, betAmt }, i) => {
           return (
             <p key={i}>
-              {name} is betting {bet}
+              {userName} is betting {betAmt}
             </p>
           );
         })}

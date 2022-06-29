@@ -6,6 +6,7 @@ import CrashBetsDisplay from "../Sections/CrashBetsDisplay";
 
 const CrashGame = () => {
   const userEmail = sessionStorage.useremail;
+  const userName = sessionStorage.username;
   const [betsArr, setBetsArr] = useState();
   const [betting, setBetting] = useState(false);
   const [bet, setBet] = useState(1);
@@ -13,6 +14,7 @@ const CrashGame = () => {
   const [gameEnd, setGameEnd] = useState(false);
   const [canBet, setCanBet] = useState(true);
   const [gameRunning, setGameRunning] = useState(false);
+  const [crashNo, setCrashNo] = useState();
 
   useEffect(() => {
     socket.emit("join_room", { roomName: "crash" });
@@ -25,6 +27,7 @@ const CrashGame = () => {
       setBetsArr(data.crashBets);
       setCanBet(data.canBet);
       setGameRunning(data.gameRunning);
+      setCrashNo(data.no);
     });
   }, [socket]);
 
@@ -33,12 +36,7 @@ const CrashGame = () => {
       setBetting(true);
       socket.emit("send_bet", {
         roomName: "crash",
-        data: {
-          name: sessionStorage.username,
-          bet: bet,
-          cancel: false,
-          betting: true,
-        },
+        data: { userEmail, userName, betAmt: bet },
       });
     } else if (betting) {
       setBetting(false);
@@ -52,6 +50,10 @@ const CrashGame = () => {
         },
       });
     }
+  };
+
+  const cashOut = () => {
+    setBetting(false);
   };
 
   return (
@@ -76,6 +78,8 @@ const CrashGame = () => {
           setBet={setBet}
           canBet={canBet}
           gameRunning={gameRunning}
+          crashNo={crashNo}
+          cashOut={cashOut}
         />
       </div>
     </div>
