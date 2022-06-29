@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-const SignUpPage = ()=>{
+const LoginPage = ()=>{
     const checkLogin = () => {
         const user = sessionStorage.getItem("user");
         if(user){
@@ -10,19 +10,18 @@ const SignUpPage = ()=>{
     checkLogin();
     const handleSubmit = (event)=>{
         event.preventDefault();
-        const { email, pass } = document.forms[0];
-        console.log(email.value, pass.value)
+        const { email, pass, name } = document.forms[0];
 
-        axios.post("http://localhost:3001/user/user/login",
+        axios.post("http://localhost:3001/user/user/signup",
          {
             email: email.value,
-            password: pass.value
+            password: pass.value,
+            name: name.value
         })
         .then(function (response) {
             console.log(response);
-            if(response.status==200){
-            sessionStorage.setItem("user", response.data)
-            window.open('/', '_self' )
+            if(response.status==201){
+            window.open('/login', '_self' )
             }
           })
           .catch(function (error) {
@@ -40,23 +39,27 @@ const SignUpPage = ()=>{
                 <div className="card-body p-5 text-center">
                     <form onSubmit={handleSubmit}>
                   <div className="mb-md-5 mt-md-4 pb-5">
-                    <h2 className="fw-bold mb-2 text-uppercase">Sign Up</h2>
-                    <p className="text-white-50 mb-5">Please enter your details</p>
+                    <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
+                    <p className="text-white-50 mb-5">Please enter your login and password!</p>
                     <div className="form-outline form-white mb-4">
                       <input type="email" id="typeEmailX" name='email' className="form-control form-control-lg" />
                       <label className="form-label" htmlFor="typeEmailX">Email</label>
+                    </div>
+                    <div className="form-outline form-white mb-4">
+                      <input type="name" id="typeEmailX" name='name' className="form-control form-control-lg" />
+                      <label className="form-label" htmlFor="typeEmailX">Name</label>
                     </div>
                     <div className="form-outline form-white mb-4">
                       <input type="password" id="typePasswordX" name='pass' className="form-control form-control-lg" />
                       <label className="form-label" htmlFor="typePasswordX">Password</label>
                     </div>
                     <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
-                    <button className="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+                    <button className="btn btn-outline-light btn-lg px-5" type="submit">Sign Up</button>
 
                   </div>
                   </form>
                   <div>
-                    <p className="mb-0">Don't have an account? <a href="#!" className="text-white-50 fw-bold">Sign Up</a>
+                    <p className="mb-0">Don't have an account? <a href="/signup" className="text-white-50 fw-bold">Sign Up</a>
                     </p>
                   </div>
                 </div>
@@ -68,4 +71,4 @@ const SignUpPage = ()=>{
     )
 }
 
-export default SignUpPage;
+export default LoginPage;
