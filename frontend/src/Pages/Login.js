@@ -7,7 +7,7 @@ const LoginPage = ()=>{
             window.open('/', '_self' )
         }
     }
-    checkLogin();
+    //checkLogin();
     const handleSubmit = (event)=>{
         event.preventDefault();
         const { email, pass } = document.forms[0];
@@ -19,10 +19,13 @@ const LoginPage = ()=>{
             password: pass.value
         })
         .then(function (response) {
-            console.log(response);
+            console.log(response.data);
             if(response.status==200){
-            sessionStorage.setItem("user", response.data)
-            window.open('/', '_self' )
+                const {email, name} = response.data
+                console.log(email)
+            sessionStorage.setItem("user", {email: email, name: name})
+            sessionStorage.setItem("username", name)
+            sessionStorage.setItem("useremail", email)
             }
           })
           .catch(function (error) {

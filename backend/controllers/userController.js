@@ -2,7 +2,7 @@ const User = require('../Models/User');
 
 module.exports.signup = async(req, res)=>{
     const {name, email, password } = req.body;
-    const {balance} = 10000
+    const {balance} = 100000
 
     let user = null;
     console.log({ name, email, balance , password })
@@ -113,4 +113,17 @@ module.exports.givewin = async(req, res)=>{
             }
             }
           } catch(err){return res.status(500).send({error: err})}
+}
+
+module.exports.getBalance = async(req, res)=>{
+  const { email } = req.params;
+  try{
+    const user = await User.findOne(
+      { email },
+      'email balance'
+    );
+    return res.status(200).send({balance: user.balance})
+  } catch(err){
+    return res.status(500).send("Caught Error in finding user")
+  }
 }
