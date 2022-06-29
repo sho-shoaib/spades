@@ -5,6 +5,7 @@ import SlotMachinePlay from "../Sections/SlotMachine/SlotMachinePlay";
 
 const SlotMachine = () => {
   const userEmail = sessionStorage.useremail;
+  const userName = sessionStorage.username;
   const [betting, setBetting] = useState(false);
   const [bet, setBet] = useState(100);
   const [fruits, setFruits] = useState(["Apple", "Banana", "Cherry"]);
@@ -15,7 +16,11 @@ const SlotMachine = () => {
   const sendMyBet = (toBet, toCashOut) => {
     if (toBet) {
       setBetting(true);
-      socket.emit("get slotMachine data", { bet });
+      socket.emit("send_bet", {
+        roomName: "slot-machine",
+        data: { userEmail, userName, betAmt: bet },
+      });
+      socket.emit("get slotMachine data");
       socket.on("recieve tower data", (data) => {
         setFruits(data.toSendArr);
         setLost(data.lost);

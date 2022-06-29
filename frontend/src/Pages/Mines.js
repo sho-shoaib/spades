@@ -5,6 +5,7 @@ import { socket } from "../App";
 
 const Mines = () => {
   const userEmail = sessionStorage.useremail;
+  const userName = sessionStorage.username;
   const [betting, setBetting] = useState(false);
   const [bet, setBet] = useState(100);
   const [checkWhat, setCheckWhat] = useState();
@@ -18,7 +19,11 @@ const Mines = () => {
     if (!betting) {
       setGame((prev) => prev + 1);
       setBetting(true);
-      socket.emit("get mines data", { bet: bet });
+      socket.emit("send_bet", {
+        roomName: "mines",
+        data: { userEmail, userName, betAmt: bet },
+      });
+      socket.emit("get mines data");
       socket.on("receive data mines", (data) => {
         setCheckWhat(data.checkWhat);
       });

@@ -16,6 +16,7 @@ function makeid(length) {
 
 const TowerLegend = () => {
   const userEmail = sessionStorage.useremail;
+  const userName = sessionStorage.username;
   const [betting, setBetting] = useState(false);
   const [bet, setBet] = useState(100);
   const [game, setGame] = useState(0);
@@ -35,8 +36,11 @@ const TowerLegend = () => {
       setGameEnd(false);
       setGame((prev) => prev + 1);
       setBetting(true);
+      socket.emit("send_bet", {
+        roomName: "tower-legend",
+        data: { userEmail, userName, betAmt: bet },
+      });
       socket.emit("get tower data", {
-        bet,
         selectedClientSeed: makeid(15),
         selectedNonce: game,
         selectedMode: 0,

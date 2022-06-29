@@ -185,7 +185,7 @@ io.on("connection", (socket) => {
     if (roomName === "crash") {
       crashBets.push(data);
     }
-    console.log(data);
+    console.log(data, roomName);
   });
 
   socket.on("cancel_bet", ({ roomName, data }) => {
@@ -224,7 +224,7 @@ io.on("connection", (socket) => {
   });
 
   // Mines
-  socket.on("get mines data", ({ bet }) => {
+  socket.on("get mines data", () => {
     function createNums(allNums, hash) {
       let nums = [];
       let h = crypto.createHash("SHA256").update(hash).digest("hex");
@@ -267,7 +267,7 @@ io.on("connection", (socket) => {
   // Tower legend
   socket.on(
     "get tower data",
-    ({ bet, selectedClientSeed, selectedNonce, selectedMode }) => {
+    ({ selectedClientSeed, selectedNonce, selectedMode }) => {
       function getResult(serverSeed, clientSeed, nonce, mode) {
         const modeInfo = difficulityOptions[mode];
         const result = [];
@@ -322,7 +322,7 @@ io.on("connection", (socket) => {
     }
   );
 
-  socket.on("get slotMachine data", ({ bet }) => {
+  socket.on("get slotMachine data", () => {
     let jackpot = false;
     let equalterms = 0;
     let lost = true;
