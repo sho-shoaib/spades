@@ -349,7 +349,7 @@ io.on("connection", (socket) => {
 
     socket.emit("recieve tower data", { toSendArr, lost, jackpot, equalterms });
   });
- });
+});
 
 server.listen(port, () => {
   console.log(`Server started on port ${port}`);
