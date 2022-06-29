@@ -185,6 +185,7 @@ io.on("connection", (socket) => {
     if (roomName === "crash") {
       crashBets.push(data);
     }
+    console.log(data);
   });
 
   socket.on("cancel_bet", ({ roomName, data }) => {

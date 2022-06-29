@@ -6,6 +6,7 @@ import axios from "axios";
 
 const CoinFlip = () => {
   const userEmail = sessionStorage.useremail;
+  const userName = sessionStorage.username;
   const [loading, setLoading] = useState(false);
   const [displayData, setDisplayData] = useState();
   const [betting, setBetting] = useState(false);
@@ -28,6 +29,10 @@ const CoinFlip = () => {
 
   const executeBet = () => {
     setBetting(!betting);
+    socket.emit("send_bet", {
+      roomName: "coinFlip",
+      data: { userEmail, userName, betAmt: bet },
+    });
   };
 
   const sendMyChoice = (choice) => {
