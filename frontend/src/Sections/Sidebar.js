@@ -11,7 +11,10 @@ const Sidebar = () => {
   };
 
   return (
-    <div className='h-screen bg-slate-900' style={{ width: "300px" }}>
+    <div
+      className='h-screen bg-slate-900 border-r-2 border-slate-700'
+      style={{ width: "300px" }}
+    >
       <div className='px-5 py-10 flex flex-col gap-10'>
         <div>
           <p

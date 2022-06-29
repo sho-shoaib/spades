@@ -42,7 +42,7 @@ const CrashGame = () => {
   };
 
   return (
-    <div className='grid grid-cols-2 grid-rows-5 py-10 px-5 w-full gap-5 child:rounded-xl child:p-3'>
+    <div className='grid grid-cols-2 grid-rows-5 py-10 px-5 w-full gap-5 child:rounded-xl child:p-3 h-screen'>
       <div className='bg-slate-600 row-span-3'>
         <CrashGraph
           crashAt={crashAt}

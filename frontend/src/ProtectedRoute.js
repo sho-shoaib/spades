@@ -1,13 +1,12 @@
 import { Navigate } from "react-router-dom";
 
- const ProtectedRoute = ({ children }) => {
-    const user = sessionStorage.getItem('user');
+const ProtectedRoute = ({ children }) => {
+  const user = sessionStorage.getItem("user");
   if (!user) {
     // user is not authenticated
-    
-    window.open('/login', '_self');
+    return window.open("/login", "_self");
   } else {
-  return children;
+    return children;
   }
 };
 export default ProtectedRoute;
