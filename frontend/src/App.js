@@ -11,6 +11,7 @@ import SlotMachine from "./Pages/SlotMachine";
 import Dice from "./Pages/Dice";
 import LoginPage from "./Pages/Login";
 import SignUpPage from "./Pages/SignUp";
+import ProtectedRoute from "./ProtectedRoute";
 export const socket = io.connect("http://localhost:3001");
 
 const App=()=> {
@@ -28,13 +29,13 @@ const App=()=> {
       <div className='flex'>
         {window.location != 'http://localhost:3000/login' && window.location != 'http://localhost:3000/signup' && <Sidebar />}
         <Routes>
-          <Route exact path='/' element={<Home />} />
-          <Route path='/crash' element={<CrashGame />} />
-          <Route path='/coinflip' element={<CoinFlip />} />
-          <Route path='/mines' element={<Mines />} />
-          <Route path='/tower-legend' element={<TowerLegend />} />
-          <Route path='slot-machine' element={<SlotMachine />} />
-          <Route path='/dice' element={<Dice />} />
+          <Route exact path='/' element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path='/crash' element={<ProtectedRoute><CrashGame /></ProtectedRoute>} />
+          <Route path='/coinflip' element={<ProtectedRoute><CoinFlip /></ProtectedRoute>} />
+          <Route path='/mines' element={<ProtectedRoute><Mines /></ProtectedRoute>} />
+          <Route path='/tower-legend' element={<ProtectedRoute><TowerLegend /></ProtectedRoute>} />
+          <Route path='slot-machine' element={<ProtectedRoute><SlotMachine /></ProtectedRoute>} />
+          <Route path='/dice' element={<ProtectedRoute><Dice /></ProtectedRoute>} />
         </Routes>
       </div>
     </BrowserRouter>
