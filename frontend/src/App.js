@@ -11,35 +11,38 @@ import SlotMachine from "./Pages/SlotMachine";
 import Dice from "./Pages/Dice";
 import LoginPage from "./Pages/Login";
 import SignUpPage from "./Pages/SignUp";
+import Navbar from "./Sections/Navbar";
 export const socket = io.connect("http://localhost:3001");
 
-const App=()=> {
-
+const App = () => {
   return (
     <>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/signup' element={<SignUpPage />} />
-
-      </Routes>
-  </BrowserRouter>
-    <BrowserRouter>
-      <div className='flex'>
-        {window.location != 'http://localhost:3000/login' && window.location != 'http://localhost:3000/signup' && <Sidebar />}
+      <BrowserRouter>
         <Routes>
-          <Route exact path='/' element={<Home />} />
-          <Route path='/crash' element={<CrashGame />} />
-          <Route path='/coinflip' element={<CoinFlip />} />
-          <Route path='/mines' element={<Mines />} />
-          <Route path='/tower-legend' element={<TowerLegend />} />
-          <Route path='slot-machine' element={<SlotMachine />} />
-          <Route path='/dice' element={<Dice />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignUpPage />} />
         </Routes>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+      <BrowserRouter>
+        <div className='flex'>
+          {window.location != "http://localhost:3000/login" &&
+            window.location != "http://localhost:3000/signup" && <Sidebar />}
+          <div className='w-full'>
+            <Navbar />
+            <Routes>
+              <Route exact path='/' element={<Home />} />
+              <Route path='/crash' element={<CrashGame />} />
+              <Route path='/coinflip' element={<CoinFlip />} />
+              <Route path='/mines' element={<Mines />} />
+              <Route path='/tower-legend' element={<TowerLegend />} />
+              <Route path='slot-machine' element={<SlotMachine />} />
+              <Route path='/dice' element={<Dice />} />
+            </Routes>
+          </div>
+        </div>
+      </BrowserRouter>
     </>
   );
-}
+};
 
 export default App;
