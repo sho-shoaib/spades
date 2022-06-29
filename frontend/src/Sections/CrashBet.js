@@ -1,28 +1,7 @@
 import React, { useState } from "react";
-import { socket } from "../App";
 
-const CrashBet = () => {
-  const [bet, setBet] = useState(1);
+const CrashBet = ({ sendMyBet, betting, bet, setBet, gameStarting }) => {
   const [slider, setSlider] = useState(false);
-  const [betting, setBetting] = useState(false);
-
-  const sendMyBet = () => {
-    if (!betting) {
-      setBetting(true);
-      socket.emit("send_bet", {
-        name: "shoaib",
-        bet: bet,
-        cancel: false,
-      });
-    } else if (betting) {
-      setBetting(false);
-      socket.emit("cancel_bet", {
-        name: "shoaib",
-        bet: bet,
-        cancel: true,
-      });
-    }
-  };
 
   return (
     <div className='flex flex-col justify-center items-center h-full gap-10'>
@@ -30,10 +9,21 @@ const CrashBet = () => {
         className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
         onClick={sendMyBet}
       >
-        {betting ? (
+        {/* {betting ? (
           <>
             <p className='-mb-0.5'>Loading...</p>
             <p>(cancel)</p>
+          </>
+        ) : (
+          <>
+            <p className='-mb-0.5'>Bet</p>
+            <p>Next Round</p>
+          </>
+        )} */}
+
+        {gameStarting ? (
+          <>
+            <p className='py-3 text-md'>Bet</p>
           </>
         ) : (
           <>

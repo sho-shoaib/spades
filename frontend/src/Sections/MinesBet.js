@@ -1,20 +1,10 @@
 import React, { useState } from "react";
 
-const MinesBet = () => {
-  const [bet, setBet] = useState(100);
+const MinesBet = ({ betting, bet, setBet, sendMyBet }) => {
   const [slider, setSlider] = useState(false);
-  const [betting, setBetting] = useState(false);
-
-  const sendMyBet = () => {
-    if (!betting) {
-      setBetting(true);
-    } else if (betting) {
-      setBetting(false);
-    }
-  };
 
   return (
-    <div className='flex flex-col justify-top items-center h-full gap-10 py-10'>
+    <div className='flex flex-col justify-top items-center h-full gap-8 py-10'>
       <div>
         <span className='text-white opacity-80 ml-4'>Amount:</span>
         <div className='relative w-72 mt-0.5 mb-0.5'>
@@ -78,6 +68,9 @@ const MinesBet = () => {
           />
           <span>Max</span>
         </div>
+      </div>
+      <div>
+        <span className='font-semibold opacity-80 text-lg'>Mines: 1</span>
       </div>
       <button
         className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'

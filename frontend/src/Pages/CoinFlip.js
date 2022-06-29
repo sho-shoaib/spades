@@ -8,6 +8,22 @@ const CoinFlip = () => {
   const [loading, setLoading] = useState(false);
   const [displayData, setDisplayData] = useState();
   const [betting, setBetting] = useState(false);
+  const [bet, setBet] = useState(100);
+
+  // join room
+  useEffect(() => {
+    socket.emit("join_room", { roomName: "coinFlip" });
+  }, []);
+
+  useEffect(() => {
+    socket.on("get coinFlip result", (data) => {
+      setDisplayData(data);
+      setTimeout(() => {
+        setLoading(false);
+        setBetting(data.betting);
+      }, 1000);
+    });
+  }, [socket]);
 
   const executeBet = () => {
     setBetting(!betting);
@@ -16,21 +32,10 @@ const CoinFlip = () => {
   const sendMyChoice = (choice) => {
     if (choice !== "") {
       setLoading(true);
-      axios
-        .post("http://localhost:3001/coin-flip", {
-          choice,
-        })
-        .then((res) => {
-          setDisplayData(res.data);
-          if (res.data.status === "LOST") {
-            setTimeout(() => {
-              executeBet();
-            }, 1000);
-          }
-        });
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      socket.emit("post coinFlip result", {
+        userChoice: choice,
+        userBetAmt: bet,
+      });
     }
   };
 
@@ -44,6 +49,8 @@ const CoinFlip = () => {
           betting={betting}
           setBetting={setBetting}
           executeBet={executeBet}
+          bet={bet}
+          setBet={setBet}
         />
       </div>
       <div className='bg-slate-600  rounded-r-xl' style={{ width: "70%" }}>

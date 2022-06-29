@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { socket } from "../App";
 
-const CrashBetsDisplay = () => {
-  const [betsArr, setBetsArr] = useState();
+const CrashBetsDisplay = ({ betsArr, setBetsArr }) => {
+  // useEffect(() => {
+  //   socket.on("receive_message", (data) => {
+  //     setBetsArr(data);
+  //     console.log(data);
+  //   });
+  // }, [socket]);
 
-  useEffect(() => {
-    socket.on("receive_message", (data) => {
-      setBetsArr(data);
-      console.log(data);
-    });
-  }, [socket]);
-
-  useEffect(() => {
-    fetch("http://localhost:3001/crash")
-      .then((response) => response.json())
-      .then((data) => setBetsArr(data.bets));
-  }, [socket]);
+  // useEffect(() => {
+  //   fetch("http://localhost:3001/crash")
+  //     .then((response) => response.json())
+  //     .then((data) => setBetsArr(data.bets));
+  // }, [socket]);
 
   return (
     <div>

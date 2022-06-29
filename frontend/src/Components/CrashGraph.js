@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { socket } from "../App";
 
-const CrashGraph = () => {
-  const [crashAt, setCrashAt] = useState();
-  const [gameEnd, setGameEnd] = useState(false);
-
-  socket.on("crash_data", (data) => {
-    setCrashAt(data.curr);
-    setGameEnd(data.end);
-  });
-
+const CrashGraph = ({ crashAt, gameEnd }) => {
   return (
     <div
       id='graph'

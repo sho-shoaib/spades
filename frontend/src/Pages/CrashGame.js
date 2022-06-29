@@ -1,19 +1,68 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { socket } from "../App";
 import CrashGraph from "../Components/CrashGraph";
 import CrashBet from "../Sections/CrashBet";
 import CrashBetsDisplay from "../Sections/CrashBetsDisplay";
 
 const CrashGame = () => {
+  const [betsArr, setBetsArr] = useState();
+  const [betting, setBetting] = useState(false);
+  const [bet, setBet] = useState(1);
+  const [crashAt, setCrashAt] = useState();
+  const [gameEnd, setGameEnd] = useState(false);
+  const [gameStarting, setGameStarting] = useState();
+
+  useEffect(() => {
+    socket.emit("join_room", { roomName: "crash" });
+  }, []);
+
+  useEffect(() => {
+    socket.on("crash_data", (data) => {
+      setCrashAt(data.curr);
+      setGameEnd(data.end);
+      setGameStarting(data.starting);
+      setBetsArr(data.crashBets);
+    });
+  }, [socket]);
+
+  const sendMyBet = () => {
+    if (!betting) {
+      setBetting(true);
+      socket.emit("send_bet", {
+        roomName: "crash",
+        data: { name: "shoaib", bet: bet, cancel: false, betting: true },
+      });
+    } else if (betting) {
+      setBetting(false);
+      socket.emit("cancel_bet", {
+        roomName: "crash",
+        data: { name: "shoaib", bet: bet, cancel: true, betting: false },
+      });
+    }
+  };
+
   return (
     <div className='grid grid-cols-2 grid-rows-5 py-10 px-5 w-full gap-5 child:rounded-xl child:p-3'>
       <div className='bg-slate-600 row-span-3'>
-        <CrashGraph />
+        <CrashGraph
+          crashAt={crashAt}
+          setCrashAt={setCrashAt}
+          gameEnd={gameEnd}
+          setGameEnd={setGameEnd}
+        />
       </div>
       <div className='bg-slate-600 row-span-5'>
-        <CrashBetsDisplay />
+        <CrashBetsDisplay betsArr={betsArr} />
       </div>
       <div className='bg-slate-600 row-span-2'>
-        <CrashBet />
+        <CrashBet
+          sendMyBet={sendMyBet}
+          betting={betting}
+          setBetting={setBetting}
+          bet={bet}
+          setBet={setBet}
+          gameStarting={gameStarting}
+        />
       </div>
     </div>
   );

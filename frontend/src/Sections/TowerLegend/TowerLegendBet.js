@@ -1,17 +1,11 @@
 import React, { useState } from "react";
+import { CgClose, CgCheck } from "react-icons/cg";
 
-const CoinFlipBet = ({
-  loading,
-  sendMyChoice,
-  betting,
-  executeBet,
-  bet,
-  setBet,
-}) => {
+const TowerLegendBet = ({ betting, sendMyBet, bet, setBet }) => {
   const [slider, setSlider] = useState(false);
 
   return (
-    <div className='flex flex-col justify-top items-center h-full gap-6 py-10'>
+    <div className='flex flex-col justify-top items-center h-full gap-8 py-10'>
       <div>
         <span className='text-white opacity-80 ml-4'>Amount:</span>
         <div className='relative w-72 mt-0.5 mb-0.5'>
@@ -21,9 +15,9 @@ const CoinFlipBet = ({
             className={`bg-slate-800 p-2 rounded-full w-full pl-4 font-semibold disabled:opacity-75`}
             value={bet}
             onChange={(e) => setBet(e.target.value)}
-            onBlur={(e) => {
-              if (e.target.value === "" || e.target.value < 100) setBet(100);
-              if (e.target.value > 200) setBet(200);
+            onMouseOut={(e) => {
+              if (e.target.value === "" || e.target.value < 1) setBet(1);
+              if (e.target.value > 2000) setBet(2000);
             }}
           />
           <div className='flex gap-0.5 child:bg-slate-600 absolute right-0 top-0 bottom-0 child:px-4 py-0.5 pr-0.5 child:font-semibold'>
@@ -61,7 +55,7 @@ const CoinFlipBet = ({
         <div
           className={`flex items-center gap-1.5 ml-4 ${
             slider ? "visible" : "hidden"
-          } mt-2`}
+          }`}
         >
           <span>Min</span>
           <input
@@ -76,37 +70,31 @@ const CoinFlipBet = ({
           <span>Max</span>
         </div>
       </div>
-      <div className='flex child:rounded-full child:py-3 child:flex-1 child:bg-orange-500 child:text-lg child:font-semibold w-full px-10 gap-4'>
-        <button
-          onClick={() => {
-            sendMyChoice("HEAD");
-          }}
-          disabled={!betting || loading}
-          className='disabled:opacity-75'
-        >
-          Heads
-        </button>
-        <button
-          onClick={() => {
-            sendMyChoice("TAIL");
-          }}
-          disabled={!betting || loading}
-          className='disabled:opacity-75'
-        >
-          Tails
-        </button>
+      <div>
+        <span className='flex gap-2 font-semibold opacity-80 text-lg'>
+          Type:
+          <div className='flex justify-center items-center border-2 border-white p-1.5 rounded'>
+            <CgClose color='red' size='14px' />
+          </div>
+          <div className='flex justify-center items-center border-2 border-white p-0.5 rounded'>
+            <CgCheck color='#4ade80' size='20px' />
+          </div>
+          <div className='flex justify-center items-center border-2 border-white p-0.5 rounded'>
+            <CgCheck color='#4ade80' size='20px' />
+          </div>
+          <div className='flex justify-center items-center border-2 border-white p-0.5 rounded'>
+            <CgCheck color='#4ade80' size='20px' />
+          </div>
+        </span>
       </div>
-      <div className='flex child:rounded-full child:py-4 child:flex-1 child:bg-orange-500 child:text-lg child:font-semibold w-full px-10 gap-4'>
-        <button
-          onClick={executeBet}
-          disabled={loading}
-          className='disabled:opacity-75'
-        >
-          {betting ? "Cash Out" : "bet"}
-        </button>
-      </div>
+      <button
+        className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
+        onClick={() => sendMyBet()}
+      >
+        {betting ? "Cash Out" : "Bet"}
+      </button>
     </div>
   );
 };
 
-export default CoinFlipBet;
+export default TowerLegendBet;
