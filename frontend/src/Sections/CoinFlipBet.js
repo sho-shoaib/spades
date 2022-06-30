@@ -7,6 +7,8 @@ const CoinFlipBet = ({
   executeBet,
   bet,
   setBet,
+  cashoutAt,
+  executeCashout,
 }) => {
   const [slider, setSlider] = useState(false);
 
@@ -97,13 +99,24 @@ const CoinFlipBet = ({
         </button>
       </div>
       <div className='flex child:rounded-full child:py-4 child:flex-1 child:bg-orange-500 child:text-lg child:font-semibold w-full px-10 gap-4'>
-        <button
-          onClick={executeBet}
-          disabled={loading}
-          className='disabled:opacity-75'
-        >
-          {betting ? "Cash Out" : "bet"}
-        </button>
+        {betting ? (
+          <button
+            onClick={executeCashout}
+            disabled={loading}
+            className='disabled:opacity-75'
+          >
+            <p className='text-xl font-semibold'>Cash Out</p>
+            <p className='text-xl font-semibold'>{cashoutAt}</p>
+          </button>
+        ) : (
+          <button
+            onClick={executeBet}
+            disabled={loading}
+            className='disabled:opacity-75'
+          >
+            <p className='text-xl font-semibold'>Bet</p>
+          </button>
+        )}
       </div>
     </div>
   );

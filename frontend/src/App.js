@@ -1,6 +1,6 @@
 import Home from "./Pages/Home";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-
+import axios from "axios";
 import Sidebar from "./Sections/Sidebar";
 import CrashGame from "./Pages/CrashGame";
 import CoinFlip from "./Pages/CoinFlip";
@@ -13,9 +13,21 @@ import LoginPage from "./Pages/Login";
 import SignUpPage from "./Pages/SignUp";
 import ProtectedRoute from "./ProtectedRoute";
 import Navbar from "./Sections/Navbar";
+import { useState } from "react";
 export const socket = io.connect("http://localhost:3001");
 
 const App = () => {
+  const userEmail = sessionStorage.useremail;
+  const [balance, setBalance] = useState(0);
+
+  const refreshWallet = () => {
+    axios
+      .get(`http://localhost:3001/user/user/getbalance/${userEmail}`)
+      .then((res) => {
+        setBalance(res.data.balance);
+      });
+  };
+
   return (
     <>
       <BrowserRouter>
@@ -30,7 +42,13 @@ const App = () => {
             window.location != "http://localhost:3000/signup" && <Sidebar />}
           <div className='w-full'>
             {window.location != "http://localhost:3000/login" &&
-              window.location != "http://localhost:3000/signup" && <Navbar />}
+              window.location != "http://localhost:3000/signup" && (
+                <Navbar
+                  balance={balance}
+                  refreshWallet={refreshWallet}
+                  setBalance={setBalance}
+                />
+              )}
             <Routes>
               <Route
                 exact
@@ -45,7 +63,11 @@ const App = () => {
                 path='/crash'
                 element={
                   <ProtectedRoute>
-                    <CrashGame />
+                    <CrashGame
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
                   </ProtectedRoute>
                 }
               />
@@ -53,7 +75,11 @@ const App = () => {
                 path='/coinflip'
                 element={
                   <ProtectedRoute>
-                    <CoinFlip />
+                    <CoinFlip
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
                   </ProtectedRoute>
                 }
               />
@@ -61,7 +87,11 @@ const App = () => {
                 path='/mines'
                 element={
                   <ProtectedRoute>
-                    <Mines />
+                    <Mines
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
                   </ProtectedRoute>
                 }
               />
@@ -69,7 +99,11 @@ const App = () => {
                 path='/tower-legend'
                 element={
                   <ProtectedRoute>
-                    <TowerLegend />
+                    <TowerLegend
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
                   </ProtectedRoute>
                 }
               />
@@ -77,7 +111,11 @@ const App = () => {
                 path='slot-machine'
                 element={
                   <ProtectedRoute>
-                    <SlotMachine />
+                    <SlotMachine
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
                   </ProtectedRoute>
                 }
               />
@@ -85,7 +123,11 @@ const App = () => {
                 path='/dice'
                 element={
                   <ProtectedRoute>
-                    <Dice />
+                    <Dice
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
                   </ProtectedRoute>
                 }
               />

@@ -9,48 +9,60 @@ const CrashBet = ({
   gameRunning,
   crashNo,
   cashOut,
+  sendBetNextRound,
+  addedToQue,
+  cancelBetNextRound,
+  cancelMyBet,
+  cashedOut,
 }) => {
   const [slider, setSlider] = useState(false);
   return (
     <div className='flex flex-col justify-center items-center h-full gap-10 '>
-      {!betting && (
-        <button
-          className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
-          onClick={sendMyBet}
-        >
-          {/* {betting ? (
-          <>
-            <p className='-mb-0.5'>Loading...</p>
-            <p>(cancel)</p>
-          </>
+      {!gameRunning &&
+        (betting ? (
+          <button
+            className='bg-yellow-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
+            onClick={cancelMyBet}
+          >
+            <p className='py-3 text-md'>Cancel</p>
+          </button>
         ) : (
-          <>
-            <p className='-mb-0.5'>Bet</p>
-            <p>Next Round</p>
-          </>
-        )} */}
-
-          {canBet ? (
-            <>
-              <p className='py-3 text-md'>Bet</p>
-            </>
-          ) : (
-            <>
-              <p className='-mb-0.5'>Bet</p>
-              <p>Next Round</p>
-            </>
-          )}
-        </button>
-      )}
-      {betting && gameRunning && (
+          <button
+            className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
+            onClick={sendMyBet}
+          >
+            <p className='py-3 text-md'>Bet</p>
+          </button>
+        ))}
+      {cashedOut && gameRunning && (
         <button
           className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
-          onClick={()=>{cashOut(parseFloat(bet) * parseFloat(crashNo))}}
+          onClick={() => {
+            cashOut(parseFloat(bet) * parseFloat(crashNo));
+          }}
         >
           <p className='text-2xl'>Cash Out</p>
           <p className='text-2xl'>({parseFloat(bet) * parseFloat(crashNo)})</p>
         </button>
       )}
+      {gameRunning &&
+        (addedToQue ? (
+          <button
+            className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
+            onClick={cancelBetNextRound}
+          >
+            <p className='-mb-0.5'>Loading..</p>
+            <p>(cancel)</p>
+          </button>
+        ) : (
+          <button
+            className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
+            onClick={sendBetNextRound}
+          >
+            <p className='-mb-0.5'>Bet</p>
+            <p>Next Round</p>
+          </button>
+        ))}
       <div>
         <span className='text-white opacity-80 ml-4'>Bet range: 1 - 2000</span>
         <div className='relative w-72 mt-0.5 mb-0.5'>

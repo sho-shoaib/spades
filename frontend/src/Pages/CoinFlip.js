@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { socket } from "../App";
 import CoinFlipBet from "../Sections/CoinFlipBet";
 import CoinFlipPlay from "../Sections/CoinFlipPlay";
-import axios from "axios";
 
-const CoinFlip = () => {
+const CoinFlip = ({ refreshWallet, setBalance }) => {
   const userEmail = sessionStorage.useremail;
   const userName = sessionStorage.username;
   const [loading, setLoading] = useState(false);
   const [displayData, setDisplayData] = useState();
   const [betting, setBetting] = useState(false);
   const [bet, setBet] = useState(100);
+  const [cashoutAt, setCashoutAt] = useState(bet);
 
   // join room
   useEffect(() => {
@@ -23,6 +23,11 @@ const CoinFlip = () => {
       setTimeout(() => {
         setLoading(false);
         setBetting(data.betting);
+        if (data.status === "WON") {
+          setCashoutAt((prev) => prev * 1.98);
+        } else if (data.status === "LOST") {
+          refreshWallet();
+        }
       }, 1000);
     });
   }, [socket]);
@@ -33,6 +38,10 @@ const CoinFlip = () => {
       roomName: "coinFlip",
       data: { userEmail, userName, betAmt: bet },
     });
+    socket.on("deducted_amt", (data) => {
+      setBalance(data.balance);
+    });
+    setCashoutAt(bet);
   };
 
   const sendMyChoice = (choice) => {
@@ -41,9 +50,16 @@ const CoinFlip = () => {
       socket.emit("post coinFlip result", {
         userChoice: choice,
         userBetAmt: bet,
-        userEmail: userEmail
+        userEmail: userEmail,
       });
     }
+  };
+
+  const executeCashout = () => {
+    socket.emit("send_reward", { userEmail, betAmt: cashoutAt });
+    setBetting(false);
+    refreshWallet();
+    setCashoutAt(bet);
   };
 
   return (
@@ -58,6 +74,8 @@ const CoinFlip = () => {
           executeBet={executeBet}
           bet={bet}
           setBet={setBet}
+          cashoutAt={cashoutAt}
+          executeCashout={executeCashout}
         />
       </div>
       <div className='bg-slate-600  rounded-r-xl' style={{ width: "70%" }}>

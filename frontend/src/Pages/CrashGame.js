@@ -15,6 +15,9 @@ const CrashGame = () => {
   const [canBet, setCanBet] = useState(true);
   const [gameRunning, setGameRunning] = useState(false);
   const [crashNo, setCrashNo] = useState();
+  const [addedToQue, setAddedToQue] = useState(false);
+  const [bettingNextRound, setBettingNextRound] = useState(false);
+  const [cashedOut, setCashedOut] = useState(false);
 
   useEffect(() => {
     socket.emit("join_room", { roomName: "crash" });
@@ -38,26 +41,52 @@ const CrashGame = () => {
         roomName: "crash",
         data: { userEmail, userName, betAmt: bet },
       });
-    } else if (betting) {
-      setBetting(false);
-      socket.emit("cancel_bet", {
-        roomName: "crash",
-        data: {
-          name: sessionStorage.username,
-          bet: bet,
-          cancel: true,
-          betting: false,
-        },
-      });
     }
   };
 
+  const cancelMyBet = () => {
+    setBetting(false);
+    socket.emit("cancel_bet", {
+      roomName: "crash",
+      data: {
+        name: sessionStorage.username,
+        bet: bet,
+        cancel: true,
+        betting: false,
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (!gameRunning) {
+      setCashedOut(false);
+    }
+    if (addedToQue && !gameRunning) {
+      setBetting(true);
+      socket.emit("send_bet", {
+        roomName: "crash",
+        data: { userEmail, userName, betAmt: bet },
+      });
+    }
+  }, [addedToQue, gameRunning]);
+
   const cashOut = (amt) => {
     setBetting(false);
+    setCashedOut(true);
     socket.emit("send_reward", {
       userEmail: userEmail,
-      betAmt: amt
+      betAmt: amt,
     });
+  };
+
+  const sendBetNextRound = () => {
+    setAddedToQue(true);
+    setBettingNextRound(true);
+  };
+
+  const cancelBetNextRound = () => {
+    setAddedToQue(false);
+    setBettingNextRound(false);
   };
 
   return (
@@ -84,6 +113,11 @@ const CrashGame = () => {
           gameRunning={gameRunning}
           crashNo={crashNo}
           cashOut={cashOut}
+          sendBetNextRound={sendBetNextRound}
+          addedToQue={addedToQue}
+          cancelBetNextRound={cancelBetNextRound}
+          cancelMyBet={cancelMyBet}
+          cashedOut={cashedOut}
         />
       </div>
     </div>
