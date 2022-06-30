@@ -15,7 +15,8 @@ const TowerLegendBtn = ({
   game,
   setGameEnd,
   setLooseText,
-  bet
+  bet,
+  setCashoutAt,
 }) => {
   const [res, setRes] = useState("slate");
 
@@ -34,15 +35,7 @@ const TowerLegendBtn = ({
     } else {
       setCurrRow(currRow - 1);
       setRes("green");
- /*      checked++
-      if(checked == 9){
-        socket.emit("send_reward", {
-          data: {
-            userEmail: sessionStorage.useremail,
-            betAmt: bet
-          }
-        })
-      } */
+      setCashoutAt((prev) => prev * 1.02);
     }
     if (currRow === 1) {
       setBetting(false);

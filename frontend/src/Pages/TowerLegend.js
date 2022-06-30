@@ -14,7 +14,7 @@ function makeid(length) {
   return result;
 }
 
-const TowerLegend = () => {
+const TowerLegend = ({ setBalance }) => {
   const userEmail = sessionStorage.useremail;
   const userName = sessionStorage.username;
   const [betting, setBetting] = useState(false);
@@ -24,6 +24,7 @@ const TowerLegend = () => {
   const [loading, setLoading] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
   const [looseText, setLooseText] = useState("");
+  const [cashoutAt, setCashoutAt] = useState();
 
   useEffect(() => {
     socket.emit("join_room", { roomName: "tower-legend" });
@@ -32,6 +33,7 @@ const TowerLegend = () => {
   const sendMyBet = () => {
     if (!betting) {
       setLoading(true);
+      setCashoutAt(bet);
       setLooseText("");
       setGameEnd(false);
       setGame((prev) => prev + 1);
@@ -39,6 +41,9 @@ const TowerLegend = () => {
       socket.emit("send_bet", {
         roomName: "tower-legend",
         data: { userEmail, userName, betAmt: bet },
+      });
+      socket.on("deducted_amt", (data) => {
+        setBalance(data.balance);
       });
       socket.emit("get tower data", {
         selectedClientSeed: makeid(15),
@@ -49,9 +54,15 @@ const TowerLegend = () => {
         setCheckWhat(data);
       });
       setLoading(false);
-    } else if (betting) {
-      setBetting(false);
     }
+  };
+
+  const cashOutAmt = () => {
+    setBetting(false);
+    socket.emit("send_reward", { userEmail, betAmt: cashoutAt });
+    socket.on("deducted_amt", (data) => {
+      setBalance(data.balance);
+    });
   };
 
   return (
@@ -63,6 +74,8 @@ const TowerLegend = () => {
           bet={bet}
           setBet={setBet}
           sendMyBet={sendMyBet}
+          cashOutAmt={cashOutAmt}
+          cashoutAt={cashoutAt}
         />
       </div>
       <div
@@ -81,6 +94,7 @@ const TowerLegend = () => {
           setLooseText={setLooseText}
           looseText={looseText}
           bet={bet}
+          setCashoutAt={setCashoutAt}
         />
       </div>
     </div>

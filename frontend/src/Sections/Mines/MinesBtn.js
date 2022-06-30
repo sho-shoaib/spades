@@ -23,6 +23,7 @@ const MinesBtn = ({
       setBetting(false);
     } else {
       setRes("green");
+      setCashoutAt((prev) => prev * 1.02);
     }
     setBtnSelected(true);
   };

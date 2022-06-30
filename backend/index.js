@@ -377,7 +377,12 @@ io.on("connection", (socket) => {
 
     var toSendArr = [fruitOne, fruitTwo, fruitThree];
 
-    socket.emit("recieve tower data", { toSendArr, lost, jackpot, equalterms });
+    socket.emit("recieve slotMachine data", {
+      toSendArr,
+      lost,
+      jackpot,
+      equalterms,
+    });
   });
 });
 

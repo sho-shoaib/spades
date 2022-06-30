@@ -1,9 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 const LoginPage = () => {
-  const location = useLocation();
-  console.log(location.pathname);
   const checkLogin = () => {
     const user = sessionStorage.getItem("user");
     if (user) {

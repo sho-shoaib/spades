@@ -3,14 +3,14 @@ import MinesBet from "../Sections/MinesBet";
 import MinesPlay from "../Sections/MinesPlay";
 import { socket } from "../App";
 
-const Mines = () => {
+const Mines = ({ setBalance }) => {
   const userEmail = sessionStorage.useremail;
   const userName = sessionStorage.username;
   const [betting, setBetting] = useState(false);
   const [bet, setBet] = useState(100);
   const [checkWhat, setCheckWhat] = useState();
   const [game, setGame] = useState(0);
-  const [cashoutAt, setCashoutAt] = useState(bet);
+  const [cashoutAt, setCashoutAt] = useState();
 
   useEffect(() => {
     socket.emit("join_room", { roomName: "mines" });
@@ -18,11 +18,15 @@ const Mines = () => {
 
   const sendMyBet = () => {
     if (!betting) {
+      setCashoutAt(bet);
       setGame((prev) => prev + 1);
       setBetting(true);
       socket.emit("send_bet", {
         roomName: "mines",
         data: { userEmail, userName, betAmt: bet },
+      });
+      socket.on("deducted_amt", (data) => {
+        setBalance(data.balance);
       });
       socket.emit("get mines data");
       socket.on("receive data mines", (data) => {
@@ -33,6 +37,10 @@ const Mines = () => {
 
   const cashOutAmt = () => {
     setBetting(false);
+    socket.emit("send_reward", { userEmail, betAmt: cashoutAt });
+    socket.on("deducted_amt", (data) => {
+      setBalance(data.balance);
+    });
   };
 
   return (

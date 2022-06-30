@@ -14,7 +14,8 @@ const TowerLegendPlay = ({
   gameEnd,
   setLooseText,
   looseText,
-  bet
+  bet,
+  setCashoutAt,
 }) => {
   const [currRow, setCurrRow] = useState(9);
 
@@ -42,6 +43,7 @@ const TowerLegendPlay = ({
                   setGameEnd={setGameEnd}
                   setLooseText={setLooseText}
                   bet={bet}
+                  setCashoutAt={setCashoutAt}
                 />
               );
             })}

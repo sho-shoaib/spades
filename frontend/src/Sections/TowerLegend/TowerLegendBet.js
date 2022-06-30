@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { CgClose, CgCheck } from "react-icons/cg";
 
-const TowerLegendBet = ({ betting, sendMyBet, bet, setBet }) => {
+const TowerLegendBet = ({
+  betting,
+  sendMyBet,
+  bet,
+  setBet,
+  cashOutAmt,
+  cashoutAt,
+}) => {
   const [slider, setSlider] = useState(false);
 
   return (
@@ -87,12 +94,22 @@ const TowerLegendBet = ({ betting, sendMyBet, bet, setBet }) => {
           </div>
         </span>
       </div>
-      <button
-        className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
-        onClick={() => sendMyBet()}
-      >
-        {betting ? "Cash Out" : "Bet"}
-      </button>
+      {betting ? (
+        <button
+          className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
+          onClick={cashOutAmt}
+        >
+          <p>Cash Out</p>
+          <p>{cashoutAt}</p>
+        </button>
+      ) : (
+        <button
+          className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
+          onClick={sendMyBet}
+        >
+          <p>Bet</p>
+        </button>
+      )}
     </div>
   );
 };

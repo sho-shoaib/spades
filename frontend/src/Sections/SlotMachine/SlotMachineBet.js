@@ -7,6 +7,8 @@ const SlotMachineBet = ({
   setBet,
   sendMyBet,
   lost,
+  cashOutAmt,
+  cashoutAt,
 }) => {
   const [slider, setSlider] = useState(false);
 
@@ -78,19 +80,27 @@ const SlotMachineBet = ({
       </div>
       <button
         className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72 disabled:opacity-70'
-        onClick={() => sendMyBet(true, false)}
+        onClick={() => sendMyBet()}
         disabled={!betting || lost}
       >
         Spin again
       </button>
-      <button
-        className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
-        onClick={() =>
-          betting ? sendMyBet(false, true) : sendMyBet(true, false)
-        }
-      >
-        {betting ? "Cash Out" : "Spin"}
-      </button>
+      {betting ? (
+        <button
+          className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
+          onClick={cashOutAmt}
+        >
+          <p>Cash Out</p>
+          <p>{cashoutAt}</p>
+        </button>
+      ) : (
+        <button
+          className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
+          onClick={sendMyBet}
+        >
+          <p>Spin</p>
+        </button>
+      )}
     </div>
   );
 };
