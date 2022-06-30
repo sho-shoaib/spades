@@ -6,7 +6,7 @@ const arr = [
   23, 24, 25,
 ];
 
-const MinesPlay = ({ betting, checkWhat, setBetting, game }) => {
+const MinesPlay = ({ betting, checkWhat, setBetting, game, setCashoutAt }) => {
   return (
     <div className='bg-slate-900 grid grid-cols-5 gap-2 p-5 rounded '>
       {arr.map((no, i) => {
@@ -19,6 +19,7 @@ const MinesPlay = ({ betting, checkWhat, setBetting, game }) => {
             checkWhat={checkWhat}
             setBetting={setBetting}
             game={game}
+            setCashoutAt={setCashoutAt}
           />
         );
       })}

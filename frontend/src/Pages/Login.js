@@ -1,37 +1,40 @@
 import React from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 const LoginPage = () => {
+  const location = useLocation();
+  console.log(location.pathname);
   const checkLogin = () => {
     const user = sessionStorage.getItem("user");
     if (user) {
       window.open("/", "_self");
     }
-}
-    checkLogin();
-    const handleSubmit = (event)=>{
-        event.preventDefault();
-        const { email, pass } = document.forms[0];
-        console.log(email.value, pass.value)
+  };
+  checkLogin();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const { email, pass } = document.forms[0];
+    console.log(email.value, pass.value);
 
-        axios.post("http://localhost:3001/user/user/login",
-         {
-            email: email.value,
-            password: pass.value
-        })
-        .then(function (response) {
-            console.log(response.data);
-            if(response.status==200){
-                const {email, name} = response.data
-                console.log(email)
-            sessionStorage.setItem("user", {email: email, name: name})
-            sessionStorage.setItem("username", name)
-            sessionStorage.setItem("useremail", email)
-            window.open('/', '_self')
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+    axios
+      .post("http://localhost:3001/user/user/login", {
+        email: email.value,
+        password: pass.value,
+      })
+      .then(function (response) {
+        console.log(response.data);
+        if (response.status == 200) {
+          const { email, name } = response.data;
+          console.log(email);
+          sessionStorage.setItem("user", { email: email, name: name });
+          sessionStorage.setItem("username", name);
+          sessionStorage.setItem("useremail", email);
+          window.open("/", "_self");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   return (
     <section className='vh-100 gradient-custom'>

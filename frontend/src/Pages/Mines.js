@@ -10,6 +10,7 @@ const Mines = () => {
   const [bet, setBet] = useState(100);
   const [checkWhat, setCheckWhat] = useState();
   const [game, setGame] = useState(0);
+  const [cashoutAt, setCashoutAt] = useState(bet);
 
   useEffect(() => {
     socket.emit("join_room", { roomName: "mines" });
@@ -27,9 +28,11 @@ const Mines = () => {
       socket.on("receive data mines", (data) => {
         setCheckWhat(data.checkWhat);
       });
-    } else if (betting) {
-      setBetting(false);
     }
+  };
+
+  const cashOutAmt = () => {
+    setBetting(false);
   };
 
   return (
@@ -41,6 +44,8 @@ const Mines = () => {
           bet={bet}
           setBet={setBet}
           sendMyBet={sendMyBet}
+          cashoutAt={cashoutAt}
+          cashOutAmt={cashOutAmt}
         />
       </div>
       <div
@@ -52,6 +57,7 @@ const Mines = () => {
           setBetting={setBetting}
           checkWhat={checkWhat}
           game={game}
+          setCashoutAt={setCashoutAt}
         />
       </div>
     </div>

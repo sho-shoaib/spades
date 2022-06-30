@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 
-const MinesBet = ({ betting, bet, setBet, sendMyBet }) => {
+const MinesBet = ({
+  betting,
+  bet,
+  setBet,
+  sendMyBet,
+  cashoutAt,
+  cashOutAmt,
+}) => {
   const [slider, setSlider] = useState(false);
 
   return (
@@ -72,12 +79,22 @@ const MinesBet = ({ betting, bet, setBet, sendMyBet }) => {
       <div>
         <span className='font-semibold opacity-80 text-lg'>Mines: 1</span>
       </div>
-      <button
-        className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
-        onClick={sendMyBet}
-      >
-        {betting ? "Cash Out" : "Bet"}
-      </button>
+      {betting ? (
+        <button
+          className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
+          onClick={cashOutAmt}
+        >
+          <p>Cash Out</p>
+          <p>{cashoutAt}</p>
+        </button>
+      ) : (
+        <button
+          className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
+          onClick={sendMyBet}
+        >
+          <p>Bet</p>
+        </button>
+      )}
     </div>
   );
 };

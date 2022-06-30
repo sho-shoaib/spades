@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 var CryptoJS = require("crypto-js");
 
-const MinesBtn = ({ betting, i, checkWhat, setBetting, game }) => {
+const MinesBtn = ({
+  betting,
+  i,
+  checkWhat,
+  setBetting,
+  game,
+  setCashoutAt,
+}) => {
   const [btnSelected, setBtnSelected] = useState(false);
   const [res, setRes] = useState("slate");
 
