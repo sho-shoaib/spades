@@ -8,6 +8,7 @@ const crypto = require("crypto");
 const mongoose = require("mongoose");
 const apiRouter = require("./routes/index");
 const axios = require("axios");
+const { appConfig } = require("../frontend/src/appConfig.js");
 //db connection starts here
 (async () => {
   try {
@@ -185,13 +186,13 @@ io.on("connection", (socket) => {
   // Bets
   socket.on("send_bet", ({ roomName, data }) => {
     axios
-      .post("http://localhost:3001/user/user/makebet/", {
+      .post(`${appConfig.API_HOST}user/user/makebet/`, {
         email: data.userEmail,
         amount: data.betAmt,
       })
       .then(() => {
         axios
-          .get(`http://localhost:3001/user/user/getbalance/${data.userEmail}`)
+          .get(`${appConfig.API_HOST}user/user/getbalance/${data.userEmail}`)
           .then((res) => {
             socket.emit("deducted_amt", { balance: res.data.balance });
           });

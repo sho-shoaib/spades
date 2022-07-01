@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { appConfig } from "../appConfig";
 const LoginPage = () => {
   const checkLogin = () => {
     const user = sessionStorage.getItem("user");
@@ -14,7 +15,7 @@ const LoginPage = () => {
     console.log(email.value, pass.value);
 
     axios
-      .post("http://localhost:3001/user/user/login", {
+      .post(`${appConfig.API_HOST}user/user/login`, {
         email: email.value,
         password: pass.value,
       })
