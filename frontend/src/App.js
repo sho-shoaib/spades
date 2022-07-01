@@ -14,7 +14,8 @@ import SignUpPage from "./Pages/SignUp";
 import ProtectedRoute from "./ProtectedRoute";
 import Navbar from "./Sections/Navbar";
 import { useState } from "react";
-export const socket = io.connect("http://localhost:3001");
+import { appConfig } from "./appConfig";
+export const socket = io.connect(appConfig.API_HOST);
 
 const App = () => {
   const userEmail = sessionStorage.useremail;
@@ -23,7 +24,7 @@ const App = () => {
 
   const refreshWallet = () => {
     axios
-      .get(`http://localhost:3001/user/user/getbalance/${userEmail}`)
+      .get(`${appConfig.API_HOST}user/user/getbalance/${userEmail}`)
       .then((res) => {
         setBalance(res.data.balance);
       });
