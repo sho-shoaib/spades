@@ -14,7 +14,7 @@ const LoginPage = () => {
     const { email, pass, name } = document.forms[0];
 
     axios
-      .post(`${appConfiga.API_HOST}user/user/signup`, {
+      .post(`${appConfig.API_HOST}user/user/signup`, {
         email: email.value,
         password: pass.value,
         name: name.value,
