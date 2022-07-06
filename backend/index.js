@@ -394,6 +394,24 @@ io.on("connection", (socket) => {
       equalterms,
     });
   });
+
+  socket.on("get dice data", (data) => {
+    let landsOn = Math.floor(Math.random() * 101);
+    let userFrom = data.from;
+    let userTo = data.to;
+    let win;
+
+    if (landsOn >= userFrom && landsOn <= userTo) {
+      win = true;
+    } else {
+      win = false;
+    }
+
+    socket.emit("recieve dice data", {
+      landsOn,
+      win,
+    });
+  });
 });
 
 server.listen(port, () => {

@@ -12,8 +12,11 @@ const wheelSlice = createSlice({
     changeBetAmt: (state, { payload }) => {
       state.betAmt = payload.betAmt;
     },
+    chnageBetting: (state, { payload }) => {
+      state.betting = payload.betting;
+    },
   },
 });
 
-export const { changeBetAmt } = wheelSlice.actions;
+export const { changeBetAmt, changeBetting } = wheelSlice.actions;
 export default wheelSlice.reducer;

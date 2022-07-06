@@ -26,7 +26,7 @@ const Navbar = ({ balance, refreshWallet }) => {
               <FaDollarSign />
             </div>
             <p className='text-xl font-semibold inline -translate-y-0.5'>
-              {balance}
+              {balance.toFixed(2)}
             </p>
           </div>
           <div className='bg-slate-600 rounded-full pr-3.5 flex items-center gap-2 pl-0.5 py-0.5'>
