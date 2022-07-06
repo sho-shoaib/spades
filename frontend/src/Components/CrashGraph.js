@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { socket } from "../App";
+import React from "react";
+import { useSelector } from "react-redux";
 
-const CrashGraph = ({ crashAt, gameEnd }) => {
+const CrashGraph = () => {
+  const { crashAtText, gameEnd } = useSelector((state) => state.crash);
+
   return (
     <div
       id='graph'
@@ -14,7 +16,7 @@ const CrashGraph = ({ crashAt, gameEnd }) => {
         <div className='w-full bg-white' style={{ height: "0.5px" }}></div>
         <div className='w-full bg-white' style={{ height: "0.5px" }}></div>
       </div>
-      <p className={`text-4xl ${gameEnd && "text-red-500"}`}>{crashAt}</p>
+      <p className={`text-4xl ${gameEnd && "text-red-500"}`}>{crashAtText}</p>
     </div>
   );
 };

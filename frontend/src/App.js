@@ -15,6 +15,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Navbar from "./Sections/Navbar";
 import { useState } from "react";
 import { appConfig } from "./appConfig";
+import Wheel from "./Pages/Wheel";
 export const socket = io.connect(appConfig.API_HOST);
 
 const App = () => {
@@ -123,6 +124,18 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Dice
+                    balance={balance}
+                    refreshWallet={refreshWallet}
+                    setBalance={setBalance}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/wheel'
+              element={
+                <ProtectedRoute>
+                  <Wheel
                     balance={balance}
                     refreshWallet={refreshWallet}
                     setBalance={setBalance}

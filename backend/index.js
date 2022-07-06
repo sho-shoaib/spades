@@ -81,6 +81,7 @@ const startGame = () => {
         crashBets,
         canBet: false,
         gameRunning: true,
+        crashed: false,
         no: i.toFixed(2),
       };
 
@@ -93,6 +94,7 @@ const startGame = () => {
           crashBets,
           canBet: false,
           gameRunning: false,
+          crashed: true,
           no: i.toFixed(2),
         };
         gameStart = false;
@@ -117,6 +119,7 @@ const runUp = () => {
         crashBets,
         canBet: true,
         gameRunning: false,
+        crashed: false,
       };
 
       if (i >= 0.1) {
@@ -208,6 +211,14 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("change_crash_bet", (data) => {
+    let found = crashBets.find((item) => item.userEmail === data.userEmail);
+    let index = crashBets.indexOf(found);
+    found.crashOutAt = data.cashedOutAt;
+    found.profit = data.profit;
+    crashBets[index] = found;
+  });
+
   // Coin flip
   socket.on("post coinFlip result", (data) => {
     const { userChoice, userBetAmt, userEmail } = data;
@@ -237,7 +248,6 @@ io.on("connection", (socket) => {
     }
   });
   socket.on("send_reward", (data) => {
-    console.log(data);
     axios
       .post("http://localhost:3001/user/user/givewin", {
         email: data.userEmail,

@@ -1,16 +1,18 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { changeBetAmt } from "../features/coinFlip/coinFlipSlice";
 
 const CoinFlipBet = ({
   loading,
   sendMyChoice,
   betting,
   executeBet,
-  bet,
-  setBet,
   cashoutAt,
   executeCashout,
 }) => {
   const [slider, setSlider] = useState(false);
+  const { betAmt } = useSelector((state) => state.coinFlip);
+  const dispatch = useDispatch();
 
   return (
     <div className='flex flex-col justify-top items-center h-full gap-6 py-10'>
@@ -21,11 +23,14 @@ const CoinFlipBet = ({
             disabled={betting}
             type='number'
             className={`bg-slate-800 p-2 rounded-full w-full pl-4 font-semibold disabled:opacity-75`}
-            value={bet}
-            onChange={(e) => setBet(e.target.value)}
+            value={betAmt}
+            onChange={(e) =>
+              dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }))
+            }
             onBlur={(e) => {
-              if (e.target.value === "" || e.target.value < 100) setBet(100);
-              if (e.target.value > 200) setBet(200);
+              if (e.target.value === "" || e.target.value < 100)
+                dispatch(changeBetAmt({ betAmt: 100 }));
+              if (e.target.value > 200) dispatch(changeBetAmt({ betAmt: 200 }));
             }}
           />
           <div className='flex gap-0.5 child:bg-slate-600 absolute right-0 top-0 bottom-0 child:px-4 py-0.5 pr-0.5 child:font-semibold'>
@@ -33,9 +38,9 @@ const CoinFlipBet = ({
               disabled={betting}
               className='rounded-l-full'
               onClick={() => {
-                setBet((prevValue) =>
-                  prevValue === 200 || prevValue * 2 > 200 ? 200 : prevValue * 2
-                );
+                betAmt === 200 || betAmt * 2 > 200
+                  ? dispatch(changeBetAmt({ betAmt: 200 }))
+                  : dispatch(changeBetAmt({ betAmt: betAmt * 2 }));
               }}
             >
               x2
@@ -43,9 +48,9 @@ const CoinFlipBet = ({
             <button
               disabled={betting}
               onClick={() => {
-                setBet((prevValue) =>
-                  prevValue === 100 || prevValue / 2 < 100 ? 100 : prevValue / 2
-                );
+                betAmt === 100 || betAmt / 2 < 100
+                  ? dispatch(changeBetAmt({ betAmt: 100 }))
+                  : dispatch(changeBetAmt({ betAmt: betAmt / 2 }));
               }}
             >
               /2
@@ -72,8 +77,8 @@ const CoinFlipBet = ({
             style={{ transform: "translateY(1px)" }}
             min={100}
             max={200}
-            value={bet}
-            onChange={(e) => setBet(e.target.value)}
+            value={betAmt}
+            onChange={(e) => dispatch(changeBetAmt({ betAmt: e.target.value }))}
           />
           <span>Max</span>
         </div>
@@ -105,8 +110,14 @@ const CoinFlipBet = ({
             disabled={loading}
             className='disabled:opacity-75'
           >
-            <p className='text-xl font-semibold'>Cash Out</p>
-            <p className='text-xl font-semibold'>{cashoutAt}</p>
+            {cashoutAt === betAmt ? (
+              <p className='text-xl font-semibold'>Cancel</p>
+            ) : (
+              <>
+                <p className='text-xl font-semibold'>Cash Out</p>
+                <p className='text-xl font-semibold'>{cashoutAt}</p>
+              </>
+            )}
           </button>
         ) : (
           <button

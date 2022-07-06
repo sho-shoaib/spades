@@ -2,15 +2,20 @@ import React, { useEffect, useState } from "react";
 import { socket } from "../App";
 import CoinFlipBet from "../Sections/CoinFlipBet";
 import CoinFlipPlay from "../Sections/CoinFlipPlay";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  changeBetting,
+  initializeCashoutAt,
+  changeCashoutAt,
+} from "../features/coinFlip/coinFlipSlice";
 
 const CoinFlip = ({ refreshWallet, setBalance }) => {
   const userEmail = sessionStorage.useremail;
   const userName = sessionStorage.username;
   const [loading, setLoading] = useState(false);
   const [displayData, setDisplayData] = useState();
-  const [betting, setBetting] = useState(false);
-  const [bet, setBet] = useState(100);
-  const [cashoutAt, setCashoutAt] = useState(bet);
+  const { betAmt, betting, cashoutAt } = useSelector((state) => state.coinFlip);
+  const dispatch = useDispatch();
 
   // join room
   useEffect(() => {
@@ -22,9 +27,9 @@ const CoinFlip = ({ refreshWallet, setBalance }) => {
       setDisplayData(data);
       setTimeout(() => {
         setLoading(false);
-        setBetting(data.betting);
+        dispatch(changeBetting({ betting: data.betting }));
         if (data.status === "WON") {
-          setCashoutAt((prev) => prev * 1.98);
+          dispatch(changeCashoutAt());
         } else if (data.status === "LOST") {
           refreshWallet();
         }
@@ -33,15 +38,15 @@ const CoinFlip = ({ refreshWallet, setBalance }) => {
   }, [socket]);
 
   const executeBet = () => {
-    setBetting(!betting);
+    dispatch(changeBetting({ betting: true }));
+    dispatch(initializeCashoutAt());
     socket.emit("send_bet", {
       roomName: "coinFlip",
-      data: { userEmail, userName, betAmt: bet },
+      data: { userEmail, userName, betAmt },
     });
     socket.on("deducted_amt", (data) => {
       setBalance(data.balance);
     });
-    setCashoutAt(bet);
   };
 
   const sendMyChoice = (choice) => {
@@ -49,7 +54,7 @@ const CoinFlip = ({ refreshWallet, setBalance }) => {
       setLoading(true);
       socket.emit("post coinFlip result", {
         userChoice: choice,
-        userBetAmt: bet,
+        userBetAmt: betAmt,
         userEmail: userEmail,
       });
     }
@@ -57,9 +62,9 @@ const CoinFlip = ({ refreshWallet, setBalance }) => {
 
   const executeCashout = () => {
     socket.emit("send_reward", { userEmail, betAmt: cashoutAt });
-    setBetting(false);
+    dispatch(changeBetting({ betting: false }));
     refreshWallet();
-    setCashoutAt(bet);
+    dispatch(changeCashoutAt({ cashoutAt: null }));
   };
 
   return (
@@ -70,10 +75,7 @@ const CoinFlip = ({ refreshWallet, setBalance }) => {
           setLoading={setLoading}
           sendMyChoice={sendMyChoice}
           betting={betting}
-          setBetting={setBetting}
           executeBet={executeBet}
-          bet={bet}
-          setBet={setBet}
           cashoutAt={cashoutAt}
           executeCashout={executeCashout}
         />

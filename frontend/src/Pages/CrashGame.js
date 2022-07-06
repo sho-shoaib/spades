@@ -3,18 +3,26 @@ import { socket } from "../App";
 import CrashGraph from "../Components/CrashGraph";
 import CrashBet from "../Sections/CrashBet";
 import CrashBetsDisplay from "../Sections/CrashBetsDisplay";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  changeBetting,
+  changeCanBet,
+  changeCrashAtText,
+  changeCrashed,
+  changeGameRunning,
+  updateBetsArr,
+  changeCrashAtNo,
+  changeCashedOut,
+  changeGameEnd,
+} from "../features/crash/crashSlice";
 
-const CrashGame = () => {
+const CrashGame = ({ setBalance }) => {
+  const { betAmt, canBet, betting, gameEnd } = useSelector(
+    (state) => state.crash
+  );
+  const dispatch = useDispatch();
   const userEmail = sessionStorage.useremail;
   const userName = sessionStorage.username;
-  const [betsArr, setBetsArr] = useState();
-  const [betting, setBetting] = useState(false);
-  const [bet, setBet] = useState(1);
-  const [crashAt, setCrashAt] = useState();
-  const [gameEnd, setGameEnd] = useState(false);
-  const [canBet, setCanBet] = useState(true);
-  const [gameRunning, setGameRunning] = useState(false);
-  const [crashNo, setCrashNo] = useState();
   const [addedToQue, setAddedToQue] = useState(false);
   const [bettingNextRound, setBettingNextRound] = useState(false);
   const [cashedOut, setCashedOut] = useState(false);
@@ -25,57 +33,55 @@ const CrashGame = () => {
 
   useEffect(() => {
     socket.on("crash_data", (data) => {
-      setCrashAt(data.curr);
-      setGameEnd(data.end);
-      setBetsArr(data.crashBets);
-      setCanBet(data.canBet);
-      setGameRunning(data.gameRunning);
-      setCrashNo(data.no);
+      dispatch(changeCrashAtText({ crashAtText: data.curr }));
+      dispatch(changeGameEnd({ gameEnd: data.end }));
+      dispatch(changeCanBet({ canBet: data.canBet }));
+      dispatch(changeGameRunning({ gameRunning: data.gameRunning }));
+      dispatch(changeCrashAtNo({ crashAtNo: data.no }));
+      dispatch(updateBetsArr({ betsArr: data.crashBets }));
+      dispatch(changeCrashed({ crashed: data.crashed }));
     });
   }, [socket]);
 
-  const sendMyBet = () => {
-    if (!betting && canBet) {
-      setBetting(true);
-      socket.emit("send_bet", {
-        roomName: "crash",
-        data: { userEmail, userName, betAmt: bet },
-      });
+  useEffect(() => {
+    if (gameEnd) {
+      dispatch(changeBetting({ betting: false }));
+      dispatch(changeCashedOut({ cashedOut: false }));
     }
-  };
+  }, [gameEnd]);
 
-  const cancelMyBet = () => {
-    setBetting(false);
-    socket.emit("cancel_bet", {
+  const sendMyBet = () => {
+    dispatch(changeBetting({ betting: true }));
+    socket.emit("send_bet", {
       roomName: "crash",
       data: {
-        name: sessionStorage.username,
-        bet: bet,
-        cancel: true,
-        betting: false,
+        userName,
+        userEmail,
+        betAmt,
+        betting,
+        crashOutAt: null,
+        profit: null,
       },
+    });
+    socket.on("deducted_amt", (data) => {
+      setBalance(data.balance);
     });
   };
 
-  useEffect(() => {
-    if (!gameRunning) {
-      setCashedOut(false);
-    }
-    if (addedToQue && !gameRunning) {
-      setBetting(true);
-      socket.emit("send_bet", {
-        roomName: "crash",
-        data: { userEmail, userName, betAmt: bet },
-      });
-    }
-  }, [addedToQue, gameRunning]);
-
-  const cashOut = (amt) => {
-    setBetting(false);
-    setCashedOut(true);
+  const cashOut = (amt, on) => {
+    dispatch(changeBetting({ betting: false }));
+    dispatch(changeCashedOut({ cashedOut: true }));
+    socket.emit("change_crash_bet", {
+      userEmail,
+      cashedOutAt: on,
+      profit: amt,
+    });
     socket.emit("send_reward", {
       userEmail: userEmail,
       betAmt: amt,
+    });
+    socket.on("deducted_amt", (data) => {
+      setBalance(data.balance);
     });
   };
 
@@ -92,31 +98,19 @@ const CrashGame = () => {
   return (
     <div className='grid grid-cols-2 grid-rows-5 py-10 px-5 w-full gap-5 child:rounded-xl child:p-3 h-screen'>
       <div className='bg-slate-600 row-span-3'>
-        <CrashGraph
-          crashAt={crashAt}
-          setCrashAt={setCrashAt}
-          gameEnd={gameEnd}
-          setGameEnd={setGameEnd}
-        />
+        <CrashGraph />
       </div>
       <div className='bg-slate-600 row-span-5'>
-        <CrashBetsDisplay betsArr={betsArr} />
+        <CrashBetsDisplay />
       </div>
       <div className='bg-slate-600 row-span-2'>
         <CrashBet
           sendMyBet={sendMyBet}
-          betting={betting}
-          setBetting={setBetting}
-          bet={bet}
-          setBet={setBet}
           canBet={canBet}
-          gameRunning={gameRunning}
-          crashNo={crashNo}
           cashOut={cashOut}
           sendBetNextRound={sendBetNextRound}
           addedToQue={addedToQue}
           cancelBetNextRound={cancelBetNextRound}
-          cancelMyBet={cancelMyBet}
           cashedOut={cashedOut}
         />
       </div>
