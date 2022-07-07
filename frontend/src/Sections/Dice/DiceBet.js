@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeBetAmt } from "../../features/dice/diceSlice";
 
-const DiceBet = ({ bet, setBet, sendMyBet, executeCashout, rollTheDice }) => {
+const DiceBet = ({ sendMyBet, executeCashout, rollTheDice }) => {
   const dispatch = useDispatch();
 
   const { betting, cashoutAt, betAmt } = useSelector((state) => state.dice);
@@ -17,7 +17,7 @@ const DiceBet = ({ bet, setBet, sendMyBet, executeCashout, rollTheDice }) => {
             disabled={betting}
             type='number'
             className={`bg-slate-800 p-2 rounded-full w-full pl-4 font-semibold disabled:opacity-75`}
-            value={bet}
+            value={betAmt}
             onChange={(e) =>
               dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }))
             }
@@ -33,11 +33,9 @@ const DiceBet = ({ bet, setBet, sendMyBet, executeCashout, rollTheDice }) => {
               disabled={betting}
               className='rounded-l-full'
               onClick={() => {
-                setBet((prevValue) =>
-                  prevValue === 15402 || prevValue * 2 > 15402
-                    ? dispatch(changeBetAmt({ betAmt: 15402 }))
-                    : prevValue * 2
-                );
+                betAmt === 15402 || betAmt * 2 > 15402
+                  ? dispatch(changeBetAmt({ betAmt: 15402 }))
+                  : dispatch(changeBetAmt({ betAmt: betAmt * 2 }));
               }}
             >
               x2
@@ -45,11 +43,9 @@ const DiceBet = ({ bet, setBet, sendMyBet, executeCashout, rollTheDice }) => {
             <button
               disabled={betting}
               onClick={() => {
-                setBet((prevValue) =>
-                  prevValue === 100 || prevValue / 2 < 100
-                    ? dispatch(changeBetAmt({ betAmt: 100 }))
-                    : prevValue / 2
-                );
+                betAmt === 100 || betAmt / 2 < 100
+                  ? dispatch(changeBetAmt({ betAmt: 100 }))
+                  : dispatch(changeBetAmt({ betAmt: betAmt / 2 }));
               }}
             >
               /2
@@ -78,7 +74,7 @@ const DiceBet = ({ bet, setBet, sendMyBet, executeCashout, rollTheDice }) => {
             style={{ transform: "translateY(1px)" }}
             min={100}
             max={15402}
-            value={bet}
+            value={betAmt}
             onChange={(e) =>
               dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }))
             }

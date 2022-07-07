@@ -16,9 +16,6 @@ const Dice = ({ setBalance }) => {
   const dispatch = useDispatch();
   const userEmail = sessionStorage.useremail;
   const userName = sessionStorage.userName;
-  const [bet, setBet] = useState(100);
-  const [checkWhat, setCheckWhat] = useState();
-  const [game, setGame] = useState(0);
 
   const { betAmt, betting, underNo, win, cashoutAt } = useSelector(
     (state) => state.dice
@@ -70,15 +67,13 @@ const Dice = ({ setBalance }) => {
     <div className='flex w-full py-10 px-5 gap-1 h-screen'>
       <div className='bg-slate-700 rounded-l-xl' style={{ width: "30%" }}>
         <DiceBet
-          bet={bet}
-          setBet={setBet}
           sendMyBet={sendMyBet}
           rollTheDice={rollTheDice}
           executeCashout={executeCashout}
         />
       </div>
       <div
-        className='bg-slate-600 rounded-r-xl flex justify-center items-center'
+        className='bg-slate-600 rounded-r-xl flex justify-center items-center overflow-x-hidden'
         style={{ width: "70%" }}
       >
         <DicePlay />

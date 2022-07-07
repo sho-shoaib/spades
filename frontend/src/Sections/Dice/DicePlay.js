@@ -43,7 +43,7 @@ const DicePlay = ({ setUnderNo }) => {
             onChange={(e) =>
               dispatch(changeUnderNo({ underNo: e.target.value }))
             }
-            className='w-full'
+            className='w-full cursor-grab active:cursor-grabbing'
           />
           <div className='slider-line flex w-full z-10'>
             <div
@@ -54,6 +54,14 @@ const DicePlay = ({ setUnderNo }) => {
               className='slider-lose h-2 bg-orange-400'
               style={{ width: `${100 - underNo}%` }}
             ></div>
+            <div
+              className='slider-sign w-full h-2 absolute'
+              style={{
+                left: `${landsOn < 2 ? "2" : landsOn > 98 ? "98" : landsOn}%`,
+              }}
+            >
+              <div className='sign w-1 h-full bg-white'></div>
+            </div>
           </div>
         </div>
         <div className='slider-mark flex justify-between w-full translate-x-2.5 mt-3'>

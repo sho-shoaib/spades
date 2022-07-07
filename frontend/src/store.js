@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import coinFlipSlice from "./features/coinFlip/coinFlipSlice";
 import crashSlice from "./features/crash/crashSlice";
 import diceSlice from "./features/dice/diceSlice";
+import slotMachineSlice from "./features/slotMachine/slotMachineSlice";
 import wheelSlice from "./features/wheel/wheelSlice";
 
 export const store = configureStore({
@@ -10,5 +11,6 @@ export const store = configureStore({
     coinFlip: coinFlipSlice,
     wheel: wheelSlice,
     dice: diceSlice,
+    slotMachine: slotMachineSlice,
   },
 });

@@ -1,26 +1,31 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-const SlotMachinePlay = ({ betting, fruits, lost, jackpot, equalTerms }) => {
+const SlotMachinePlay = () => {
+  const { fruitsArr, lost, betting, jackpot, equalTerms } = useSelector(
+    (state) => state.slotMachine
+  );
+
   return (
     <>
       <div className='bg-slate-900 p-5 gap-5 rounded-xl flex child:bg-slate-600 child:rounded-xl  child:w-52 child:h-52 child:cursor-auto'>
         <button
-          disabled={!betting}
+          disabled={!betting || lost}
           className='disabled:opacity-60 text-4xl font-semibold'
         >
-          {fruits[0]}
+          {fruitsArr[0]}
         </button>
         <button
-          disabled={!betting}
+          disabled={!betting || lost}
           className='disabled:opacity-60 text-4xl font-semibold'
         >
-          {fruits[1]}
+          {fruitsArr[1]}
         </button>
         <button
-          disabled={!betting}
+          disabled={!betting || lost}
           className='disabled:opacity-60 text-4xl font-semibold'
         >
-          {fruits[2]}
+          {fruitsArr[2]}
         </button>
       </div>
       {jackpot && <p className='text-4xl font-semibold'>JACKPOT!</p>}
