@@ -29,7 +29,7 @@ const diceSlice = createSlice({
       state.win = payload.win;
     },
     changeCashoutAt: (state) => {
-      state.cashoutAt = (state.cashoutAt * 1.099).toFixed(2);
+      state.cashoutAt = (state.cashoutAt * 1.09).toFixed(2);
     },
     initializeCashoutAt: (state) => {
       state.cashoutAt = state.betAmt;
