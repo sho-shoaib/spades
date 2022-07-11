@@ -39,3 +39,34 @@ input[type=number] {
   
   border-top: 7px solid rgb(15 23 42); 
 }
+
+canvas{
+  display:block;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes flip {
+  0% {
+    transform: rotateY(0deg) scale(1);
+  }
+  50% {
+    transform: rotateY(-360deg) scale(1.2);
+  }
+  100% {
+    transform: rotateY(0deg) scale(1);
+  }
+}
+
+.result {
+  transform: translateZ(1px);
+  -webkit-transform: translateZ(1px);
+}
+
+.no-result {
+  transform: translateZ(-1px) rotateY(180deg);
+  -webkit-transform: translateZ(-1px) rotateY(180deg);
+}

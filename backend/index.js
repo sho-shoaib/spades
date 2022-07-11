@@ -182,7 +182,7 @@ io.on("connection", (socket) => {
   // Join rooms
   socket.on("join_room", ({ roomName }) => {
     socket.join(roomName);
-    console.log(`user joined ${roomName}`);
+    console.log(`${socket.id} joined ${roomName}`);
   });
 
   // Bets
@@ -221,7 +221,7 @@ io.on("connection", (socket) => {
 
   // Coin flip
   socket.on("post coinFlip result", (data) => {
-    const { userChoice, userBetAmt, userEmail } = data;
+    const { userChoice, userBetAmt, multiplier } = data;
     let num = Math.random();
     let result = "";
 
@@ -237,6 +237,8 @@ io.on("connection", (socket) => {
         status: "WON",
         serverChoice: result,
         betting: true,
+        userBetAmt: userBetAmt * 1.98,
+        multiplier: multiplier + 1.98,
       });
     } else {
       socket.emit("get coinFlip result", {
@@ -244,6 +246,8 @@ io.on("connection", (socket) => {
         status: "LOST",
         serverChoice: result,
         betting: false,
+        userBetAmt: userBetAmt * 0,
+        multiplier: multiplier * 0,
       });
     }
   });
@@ -355,6 +359,7 @@ io.on("connection", (socket) => {
         bombPositions.toString(),
         secret
       ).toString();
+      console.log(bombPositions);
       console.log(checkWhat);
       socket.emit("recieve tower data", checkWhat);
     }

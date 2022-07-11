@@ -7,7 +7,6 @@ const Sidebar = () => {
 
   const handleClick = (roomName) => {
     navigate(`/${roomName}`);
-    socket.emit("join_room", { roomName });
   };
 
   return (

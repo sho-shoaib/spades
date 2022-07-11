@@ -2,19 +2,24 @@ import React, { useEffect, useState } from "react";
 import { socket } from "../App";
 import CoinFlipBet from "../Sections/CoinFlipBet";
 import CoinFlipPlay from "../Sections/CoinFlipPlay";
+import bg from "../assets/coinFlip/bg_coinFlip.jpg";
 import { useSelector, useDispatch } from "react-redux";
 import {
   changeBetting,
   initializeCashoutAt,
   changeCashoutAt,
+  setDisplayData,
+  changeSeries,
+  changeMultiplier,
 } from "../features/coinFlip/coinFlipSlice";
 
 const CoinFlip = ({ refreshWallet, setBalance }) => {
   const userEmail = sessionStorage.useremail;
   const userName = sessionStorage.username;
   const [loading, setLoading] = useState(false);
-  const [displayData, setDisplayData] = useState();
-  const { betAmt, betting, cashoutAt } = useSelector((state) => state.coinFlip);
+  const { betAmt, cashoutAt, multiplier } = useSelector(
+    (state) => state.coinFlip
+  );
   const dispatch = useDispatch();
 
   // join room
@@ -24,22 +29,28 @@ const CoinFlip = ({ refreshWallet, setBalance }) => {
 
   useEffect(() => {
     socket.on("get coinFlip result", (data) => {
-      setDisplayData(data);
+      dispatch(setDisplayData({ displayData: data }));
       setTimeout(() => {
         setLoading(false);
         dispatch(changeBetting({ betting: data.betting }));
         if (data.status === "WON") {
-          dispatch(changeCashoutAt());
+          dispatch(changeCashoutAt({ cashoutAt: data.userBetAmt }));
+          dispatch(changeMultiplier({ multiplier: data.multiplier }));
         } else if (data.status === "LOST") {
           refreshWallet();
+          dispatch(changeCashoutAt({ cashoutAt: data.userBetAmt }));
+          dispatch(changeMultiplier({ multiplier: data.multiplier }));
         }
       }, 1000);
     });
   }, [socket]);
 
   const executeBet = () => {
+    dispatch(setDisplayData({ displayData: { empty: true } }));
     dispatch(changeBetting({ betting: true }));
     dispatch(initializeCashoutAt());
+    dispatch(changeSeries({ series: "re" }));
+    dispatch(changeMultiplier({ multiplier: 0.0 }));
     socket.emit("send_bet", {
       roomName: "coinFlip",
       data: { userEmail, userName, betAmt },
@@ -51,11 +62,12 @@ const CoinFlip = ({ refreshWallet, setBalance }) => {
 
   const sendMyChoice = (choice) => {
     if (choice !== "") {
+      dispatch(changeSeries({ series: "add" }));
       setLoading(true);
       socket.emit("post coinFlip result", {
         userChoice: choice,
-        userBetAmt: betAmt,
-        userEmail: userEmail,
+        userBetAmt: cashoutAt,
+        multiplier: multiplier,
       });
     }
   };
@@ -74,14 +86,15 @@ const CoinFlip = ({ refreshWallet, setBalance }) => {
           loading={loading}
           setLoading={setLoading}
           sendMyChoice={sendMyChoice}
-          betting={betting}
           executeBet={executeBet}
-          cashoutAt={cashoutAt}
           executeCashout={executeCashout}
         />
       </div>
-      <div className='bg-slate-600  rounded-r-xl' style={{ width: "70%" }}>
-        <CoinFlipPlay loading={loading} displayData={displayData} />
+      <div
+        className='bg-slate-600  rounded-r-xl flex justify-center items-center bg-cover'
+        style={{ width: "70%", backgroundImage: `url(${bg})` }}
+      >
+        <CoinFlipPlay loading={loading} />
       </div>
     </div>
   );

@@ -1,21 +1,8 @@
-import React, { useState } from "react";
-import wheelMain from "../../assets/wheel-main.png";
-import { motion } from "framer-motion";
+import React from "react";
+// import wheelGame from "../../games/wheel/game";
 
 const WheelPlay = () => {
-  return (
-    <motion.img
-      src={wheelMain}
-      alt='wheel-main'
-      // animate={{ rotate: 360 }}
-      transition={{
-        duration: 1.5,
-        repeat: Infinity,
-        type: "tween",
-        ease: "linear",
-      }}
-    />
-  );
+  return <h1>Helo</h1>;
 };
 
 export default WheelPlay;

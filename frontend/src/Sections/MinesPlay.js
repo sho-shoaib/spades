@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import MinesBtn from "./Mines/MinesBtn";
 
 const arr = [
@@ -6,23 +7,17 @@ const arr = [
   23, 24, 25,
 ];
 
-const MinesPlay = ({ betting, checkWhat, setBetting, game, setCashoutAt }) => {
+const MinesPlay = () => {
   return (
-    <div className='bg-slate-900 grid grid-cols-5 gap-2 p-5 rounded '>
-      {arr.map((no, i) => {
-        return (
-          <MinesBtn
-            key={i}
-            no={no}
-            betting={betting}
-            i={i}
-            checkWhat={checkWhat}
-            setBetting={setBetting}
-            game={game}
-            setCashoutAt={setCashoutAt}
-          />
-        );
-      })}
+    <div
+      className='w-full h-full flex justify-center items-center'
+      style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+    >
+      <div className='grid grid-cols-5 gap-2 p-5 rounded'>
+        {arr.map((no, i) => {
+          return <MinesBtn key={i} no={no} i={i} />;
+        })}
+      </div>
     </div>
   );
 };

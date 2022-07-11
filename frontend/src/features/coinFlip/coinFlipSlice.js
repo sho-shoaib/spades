@@ -5,7 +5,10 @@ const initialState = {
   betAmt: 100,
   betting: false,
   cashoutAt: null,
-  displayData: {},
+  displayData: { empty: true },
+  series: 0,
+  startAnimation: false,
+  multiplier: 0.0,
 };
 
 const coinFlipSlice = createSlice({
@@ -21,8 +24,24 @@ const coinFlipSlice = createSlice({
     initializeCashoutAt: (state) => {
       state.cashoutAt = state.betAmt;
     },
-    changeCashoutAt: (state) => {
-      state.cashoutAt = state.cashoutAt * 1.2;
+    changeCashoutAt: (state, { payload }) => {
+      state.cashoutAt = payload.cashoutAt;
+    },
+    changeSeries: (state, { payload }) => {
+      if (payload.series === "add") {
+        state.series += 1;
+      } else if (payload.series === "re") {
+        state.series = 0;
+      }
+    },
+    changeAnimation: (state, { payload }) => {
+      state.startAnimation = payload.startAnimation;
+    },
+    setDisplayData: (state, { payload }) => {
+      state.displayData = payload.displayData;
+    },
+    changeMultiplier: (state, { payload }) => {
+      state.multiplier = payload.multiplier;
     },
   },
 });
@@ -32,5 +51,9 @@ export const {
   changeBetting,
   initializeCashoutAt,
   changeCashoutAt,
+  changeSeries,
+  changeAnimation,
+  setDisplayData,
+  changeMultiplier,
 } = coinFlipSlice.actions;
 export default coinFlipSlice.reducer;

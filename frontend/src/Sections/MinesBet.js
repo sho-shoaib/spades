@@ -1,14 +1,14 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { changeBetAmt } from "../features/mines/minesSlice";
 
-const MinesBet = ({
-  betting,
-  bet,
-  setBet,
-  sendMyBet,
-  cashoutAt,
-  cashOutAmt,
-}) => {
+const MinesBet = ({ sendMyBet, cashOutAmt }) => {
   const [slider, setSlider] = useState(false);
+  const dispatch = useDispatch();
+
+  const { betting, cashoutAt, betAmt, totalProfit, nextProfit } = useSelector(
+    (state) => state.mines
+  );
 
   return (
     <div className='flex flex-col justify-top items-center h-full gap-8 py-10'>
@@ -19,11 +19,15 @@ const MinesBet = ({
             disabled={betting}
             type='number'
             className={`bg-slate-800 p-2 rounded-full w-full pl-4 font-semibold disabled:opacity-75`}
-            value={bet}
-            onChange={(e) => setBet(e.target.value)}
-            onMouseOut={(e) => {
-              if (e.target.value === "" || e.target.value < 1) setBet(1);
-              if (e.target.value > 2000) setBet(2000);
+            value={betAmt}
+            onChange={(e) =>
+              dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }))
+            }
+            onBlur={(e) => {
+              if (e.target.value === "" || e.target.value < 1)
+                dispatch(changeBetAmt({ betAmt: parseFloat(1) }));
+              if (e.target.value > 200)
+                dispatch(changeBetAmt({ betAmt: parseFloat(200) }));
             }}
           />
           <div className='flex gap-0.5 child:bg-slate-600 absolute right-0 top-0 bottom-0 child:px-4 py-0.5 pr-0.5 child:font-semibold'>
@@ -31,9 +35,9 @@ const MinesBet = ({
               disabled={betting}
               className='rounded-l-full'
               onClick={() => {
-                setBet((prevValue) =>
-                  prevValue === 200 || prevValue * 2 > 200 ? 200 : prevValue * 2
-                );
+                betAmt === 200 || betAmt * 2 > 200
+                  ? dispatch(changeBetAmt({ betAmt: parseFloat(200) }))
+                  : dispatch(changeBetAmt({ betAmt: parseFloat(betAmt * 2) }));
               }}
             >
               x2
@@ -41,9 +45,9 @@ const MinesBet = ({
             <button
               disabled={betting}
               onClick={() => {
-                setBet((prevValue) =>
-                  prevValue === 100 || prevValue / 2 < 100 ? 100 : prevValue / 2
-                );
+                betAmt === 100 || betAmt / 2 < 100
+                  ? dispatch(changeBetAmt({ betAmt: parseFloat(100) }))
+                  : dispatch(changeBetAmt({ betAmt: parseFloat(betAmt / 2) }));
               }}
             >
               /2
@@ -70,14 +74,47 @@ const MinesBet = ({
             style={{ transform: "translateY(1px)" }}
             min={100}
             max={200}
-            value={bet}
-            onChange={(e) => setBet(e.target.value)}
+            value={betAmt}
+            onChange={(e) =>
+              dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }))
+            }
           />
           <span>Max</span>
         </div>
       </div>
-      <div>
-        <span className='font-semibold opacity-80 text-lg'>Mines: 1</span>
+      <div className='flex flex-col gap-4'>
+        <div className='w-72 flex flex-col gap-2'>
+          <div className='px-3'>
+            <span className=' opacity-90 text-base'>Mines:</span>
+          </div>
+          <div className='py-2 px-4 bg-slate-900 rounded-full'>
+            <span>1</span>
+          </div>
+        </div>
+        {betting && (
+          <>
+            <div className='w-72 flex flex-col gap-2'>
+              <div className='px-3'>
+                <span className=' opacity-90 text-base'>
+                  Profit on Next Tile ({nextProfit[1]}x):
+                </span>
+              </div>
+              <div className='py-2 px-4 bg-slate-900 rounded-full'>
+                <span>{nextProfit[0].toFixed(2)}</span>
+              </div>
+            </div>
+            <div className='w-72 flex flex-col gap-2'>
+              <div className='px-3'>
+                <span className=' opacity-90 text-base'>
+                  Total Profit ({totalProfit[1]}x):
+                </span>
+              </div>
+              <div className='py-2 px-4 bg-slate-900 rounded-full'>
+                <span>{totalProfit[0].toFixed(2)}</span>
+              </div>
+            </div>
+          </>
+        )}
       </div>
       {betting ? (
         <button
@@ -85,7 +122,7 @@ const MinesBet = ({
           onClick={cashOutAmt}
         >
           <p>Cash Out</p>
-          <p>{cashoutAt}</p>
+          <p>{cashoutAt.toFixed(2)}</p>
         </button>
       ) : (
         <button

@@ -2,16 +2,9 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { changeBetAmt } from "../features/coinFlip/coinFlipSlice";
 
-const CoinFlipBet = ({
-  loading,
-  sendMyChoice,
-  betting,
-  executeBet,
-  cashoutAt,
-  executeCashout,
-}) => {
+const CoinFlipBet = ({ loading, sendMyChoice, executeBet, executeCashout }) => {
   const [slider, setSlider] = useState(false);
-  const { betAmt } = useSelector((state) => state.coinFlip);
+  const { betAmt, betting, cashoutAt } = useSelector((state) => state.coinFlip);
   const dispatch = useDispatch();
 
   return (
@@ -78,7 +71,9 @@ const CoinFlipBet = ({
             min={100}
             max={200}
             value={betAmt}
-            onChange={(e) => dispatch(changeBetAmt({ betAmt: e.target.value }))}
+            onChange={(e) =>
+              dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }))
+            }
           />
           <span>Max</span>
         </div>
@@ -115,7 +110,7 @@ const CoinFlipBet = ({
             ) : (
               <>
                 <p className='text-xl font-semibold'>Cash Out</p>
-                <p className='text-xl font-semibold'>{cashoutAt}</p>
+                <p className='text-xl font-semibold'>{cashoutAt.toFixed(2)}</p>
               </>
             )}
           </button>

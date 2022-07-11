@@ -27,7 +27,7 @@ const TowerLegendBtn = ({
       parseInt(
         CryptoJS.AES.decrypt(checkWhat, "shoaib")
           .toString(CryptoJS.enc.Utf8)
-          .split(",")[row]
+          .split(",")[row - 1]
       )
     ) {
       setBetting(false);
