@@ -1,75 +1,121 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { changeUnderNo } from "../../features/dice/diceSlice";
+import Slider from "react-input-slider";
+import tip from "../../assets/dice/dice_tip.png";
+import dice from "../../assets/dice/dice_dice.png";
+import winImg from "../../assets/dice/dice_win.png";
 
-const DicePlay = ({ setUnderNo }) => {
+const DicePlay = () => {
   const dispatch = useDispatch();
-  const { underNo, win, landsOn } = useSelector((state) => state.dice);
+  const { win, landsOn } = useSelector((state) => state.dice);
+  const [state, setState] = useState({ x: 50 });
+  const [display, setDisplay] = useState(false);
 
   return (
     <div className='w-full flex flex-col items-center gap-10'>
       <div className='slider-wrapper w-9/12'>
-        <div className='slider-handles bg-slate-700 p-3 rounded-lg pt-4 relative'>
-          <div
-            className={`slider-tip bg-slate-900 absolute -top-24 p-2 px-4 rounded-xl -translate-x-6`}
-            style={{ left: `${landsOn}%` }}
-          >
-            {landsOn}
-            <div className='arrow-down absolute translate-y-1.5'></div>
-            {win === null && (
-              <p className='absolute w-24 top-1/4 translate-x-12 -translate-y-1.5'>
-                Dice lands on
-              </p>
-            )}
-          </div>
-          <div
-            className={`slider-tip bg-slate-900 absolute -top-10 p-2 px-4 rounded-xl -translate-x-6`}
-            style={{ left: `${underNo}%` }}
-          >
-            {underNo}
-            <div className='arrow-down absolute translate-y-1.5'></div>
-            {win === null && (
-              <p className='absolute w-24 top-1/4 translate-x-12 -translate-y-1.5'>
-                Your Choice
-              </p>
-            )}
-          </div>
-          <input
-            type='range'
-            min='2'
-            max='98'
-            step='1'
-            value={underNo}
-            onChange={(e) =>
-              dispatch(changeUnderNo({ underNo: e.target.value }))
-            }
-            className='w-full cursor-grab active:cursor-grabbing'
-          />
-          <div className='slider-line flex w-full z-10'>
+        <div className='slider-handles bg-slate-700 p-7 pb-2 rounded-lg pt-4 relative w-full'>
+          <div className='dice-display w-full relative -top-56 -ml-11'>
             <div
-              className='slider-win h-2 bg-green-400'
-              style={{ width: `${underNo}%` }}
-            ></div>
-            <div
-              className='slider-lose h-2 bg-orange-400'
-              style={{ width: `${100 - underNo}%` }}
-            ></div>
-            <div
-              className='slider-sign w-full h-2 absolute'
               style={{
-                left: `${landsOn < 2 ? "2" : landsOn > 98 ? "98" : landsOn}%`,
+                left: `${landsOn}%`,
+                transition: "left 0.4s ease 0s",
               }}
+              className='absolute flex flex-col items-center gap-4'
             >
-              <div className='sign w-1 h-full bg-white'></div>
+              <div
+                className={`border-4 py-3 px-6 rounded-lg bg-slate-900 border-slate-400 text-2xl font-bold ${
+                  win ? "text-green-400" : "text-orange-400"
+                } -translate-x-5`}
+              >
+                {landsOn}
+              </div>
+              <div className='w-32 relative'>
+                {win && (
+                  <img
+                    src={winImg}
+                    alt='win'
+                    className='absolute -top-5 -left-5'
+                    style={{ animation: "spin-win .3s linear infinite" }}
+                  />
+                )}
+                <img
+                  src={dice}
+                  alt='dice'
+                  className='w-16 absolute top-2 translate-x-2'
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div className='slider-mark flex justify-between w-full translate-x-2.5 mt-3'>
-          <span>0</span>
-          <span>25</span>
-          <span>50</span>
-          <span>75</span>
-          <span>100</span>
+          <div className='w-full relative'>
+            <div
+              style={{ backgroundImage: `url(${tip})`, left: `${state.x}%` }}
+              className={`absolute w-12 h-12 bg-contain -top-14 bg-no-repeat flex justify-center items-center -ml-6 ${
+                display ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <p className='-mt-2.5'>{state.x}</p>
+            </div>
+            <div
+              className='w-full relative'
+              onMouseOver={() => setDisplay(true)}
+              onMouseOut={() => setDisplay(false)}
+            >
+              <Slider
+                style={{ width: "100%", zIndex: "100" }}
+                axis='x'
+                styles={{
+                  track: {
+                    backgroundColor: "#ED6300",
+                    width: "50%",
+                  },
+                  active: {
+                    backgroundColor: "#43B309",
+                    width: "50%",
+                  },
+                  thumb: {
+                    width: 27,
+                    height: 38,
+                    borderRadius: "50px",
+                  },
+                }}
+                xmax={100}
+                xmin={0}
+                x={state.x}
+                onChange={({ x }) => {
+                  if (x >= 2 && x <= 98) {
+                    setState({ x });
+                    dispatch(changeUnderNo({ underNo: x }));
+                  }
+                }}
+                xstep={1}
+              />
+              <div
+                className='slider-sign w-full absolute'
+                style={{
+                  top: "9.1px",
+                  height: "8.85px",
+                }}
+              >
+                <div
+                  className='slider-sign-main h-full w-1.5 bg-white z-10 absolute'
+                  style={{
+                    left: `${landsOn}%`,
+                    zIndex: "200",
+                    transition: "left 0.4s ease 0s",
+                  }}
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div className='slider-mark w-full flex justify-between mt-3'>
+            <span>0</span>
+            <span className='translate-x-1'>25</span>
+            <span className='translate-x-2'>50</span>
+            <span className='translate-x-3'>75</span>
+            <span className='translate-x-3'>100</span>
+          </div>
         </div>
       </div>
       <div>

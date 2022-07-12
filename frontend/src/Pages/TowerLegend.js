@@ -1,7 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { socket } from "../App";
 import TowerLegendBet from "../Sections/TowerLegend/TowerLegendBet";
 import TowerLegendPlay from "../Sections/TowerLegend/TowerLegendPlay";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  changeBetting,
+  changeLoading,
+  changeCashoutAt,
+  changelooseText,
+  changeGameEnd,
+  changeGame,
+  changeCheckWhat,
+} from "../features/towerLegend/towerLegendSlice";
 
 function makeid(length) {
   var result = "";
@@ -17,14 +27,12 @@ function makeid(length) {
 const TowerLegend = ({ setBalance }) => {
   const userEmail = sessionStorage.useremail;
   const userName = sessionStorage.username;
-  const [betting, setBetting] = useState(false);
-  const [bet, setBet] = useState(100);
-  const [game, setGame] = useState(0);
-  const [checkWhat, setCheckWhat] = useState();
-  const [loading, setLoading] = useState(false);
-  const [gameEnd, setGameEnd] = useState(false);
-  const [looseText, setLooseText] = useState("");
-  const [cashoutAt, setCashoutAt] = useState();
+
+  const dispatch = useDispatch();
+
+  const { betting, betAmt, loading, cashoutAt, game } = useSelector(
+    (state) => state.towerLegend
+  );
 
   useEffect(() => {
     socket.emit("join_room", { roomName: "tower-legend" });
@@ -32,15 +40,15 @@ const TowerLegend = ({ setBalance }) => {
 
   const sendMyBet = () => {
     if (!betting) {
-      setLoading(true);
-      setCashoutAt(bet);
-      setLooseText("");
-      setGameEnd(false);
-      setGame((prev) => prev + 1);
-      setBetting(true);
+      dispatch(changeLoading({ loading: true }));
+      dispatch(changeCashoutAt({ cashoutAt: betAmt }));
+      dispatch(changelooseText({ looseText: "" }));
+      dispatch(changeGameEnd({ gameEnd: false }));
+      dispatch(changeGame({ game: game + 1 }));
+      dispatch(changeBetting({ betting: true }));
       socket.emit("send_bet", {
         roomName: "tower-legend",
-        data: { userEmail, userName, betAmt: bet },
+        data: { userEmail, userName, betAmt },
       });
       socket.on("deducted_amt", (data) => {
         setBalance(data.balance);
@@ -51,14 +59,14 @@ const TowerLegend = ({ setBalance }) => {
         selectedMode: 0,
       });
       socket.on("recieve tower data", (data) => {
-        setCheckWhat(data);
+        dispatch(changeCheckWhat({ checkWhat: data }));
       });
-      setLoading(false);
+      dispatch(changeLoading({ loading: false }));
     }
   };
 
   const cashOutAmt = () => {
-    setBetting(false);
+    dispatch(changeBetting({ betting: false }));
     socket.emit("send_reward", { userEmail, betAmt: cashoutAt });
     socket.on("deducted_amt", (data) => {
       setBalance(data.balance);
@@ -68,34 +76,13 @@ const TowerLegend = ({ setBalance }) => {
   return (
     <div className='flex w-full py-10 px-5 gap-1 h-screen'>
       <div className='bg-slate-700 rounded-l-xl' style={{ width: "30%" }}>
-        <TowerLegendBet
-          betting={betting}
-          setBetting={setBetting}
-          bet={bet}
-          setBet={setBet}
-          sendMyBet={sendMyBet}
-          cashOutAmt={cashOutAmt}
-          cashoutAt={cashoutAt}
-        />
+        <TowerLegendBet sendMyBet={sendMyBet} cashOutAmt={cashOutAmt} />
       </div>
       <div
         className='bg-slate-600 rounded-r-xl flex justify-center items-center'
         style={{ width: "70%" }}
       >
-        <TowerLegendPlay
-          betting={betting}
-          setBetting={setBetting}
-          sendMyBet={sendMyBet}
-          checkWhat={checkWhat}
-          loading={loading}
-          game={game}
-          setGameEnd={setGameEnd}
-          gameEnd={gameEnd}
-          setLooseText={setLooseText}
-          looseText={looseText}
-          bet={bet}
-          setCashoutAt={setCashoutAt}
-        />
+        <TowerLegendPlay sendMyBet={sendMyBet} />
       </div>
     </div>
   );

@@ -70,3 +70,12 @@ canvas{
   transform: translateZ(-1px) rotateY(180deg);
   -webkit-transform: translateZ(-1px) rotateY(180deg);
 }
+
+@keyframes spin-win {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(30deg);
+  }
+}

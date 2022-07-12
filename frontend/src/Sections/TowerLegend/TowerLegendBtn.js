@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { MdNavigation } from "react-icons/md";
-import { socket } from "../../App";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  changeBetting,
+  changeGameEnd,
+  changelooseText,
+  changeCashoutAt,
+} from "../../features/towerLegend/towerLegendSlice";
 var CryptoJS = require("crypto-js");
 
-const TowerLegendBtn = ({
-  betting,
-  loading,
-  rowNo,
-  btnNo,
-  checkWhat,
-  setBetting,
-  setCurrRow,
-  currRow,
-  game,
-  setGameEnd,
-  setLooseText,
-  bet,
-  setCashoutAt,
-}) => {
+const TowerLegendBtn = ({ rowNo, btnNo, setCurrRow, currRow }) => {
   const [res, setRes] = useState("slate");
+  const dispatch = useDispatch();
+
+  const { betAmt, betting, loading, checkWhat, game, cashoutAt } = useSelector(
+    (state) => state.towerLegend
+  );
 
   const checkIf = (clickedOn, row) => {
     let checked = 0;
@@ -30,17 +27,17 @@ const TowerLegendBtn = ({
           .split(",")[row - 1]
       )
     ) {
-      setBetting(false);
+      dispatch(changeBetting({ betting: false }));
       setRes("red");
     } else {
       setCurrRow(currRow - 1);
       setRes("green");
-      setCashoutAt((prev) => prev * 1.02);
+      dispatch(changeCashoutAt({ cashoutAt: cashoutAt * 1.02 }));
     }
     if (currRow === 1) {
-      setBetting(false);
-      setGameEnd(true);
-      setLooseText("Congratulations! You Won");
+      dispatch(changeBetting({ betting: false }));
+      dispatchEvent(changeGameEnd({ gameEnd: true }));
+      dispatch(changelooseText({ looseText: "Congratulations! You Won" }));
     }
   };
 

@@ -4,6 +4,7 @@ import crashSlice from "./features/crash/crashSlice";
 import diceSlice from "./features/dice/diceSlice";
 import minesSlice from "./features/mines/minesSlice";
 import slotMachineSlice from "./features/slotMachine/slotMachineSlice";
+import towerLegendSlice from "./features/towerLegend/towerLegendSlice";
 import wheelSlice from "./features/wheel/wheelSlice";
 
 export const store = configureStore({
@@ -14,5 +15,6 @@ export const store = configureStore({
     dice: diceSlice,
     slotMachine: slotMachineSlice,
     mines: minesSlice,
+    towerLegend: towerLegendSlice,
   },
 });

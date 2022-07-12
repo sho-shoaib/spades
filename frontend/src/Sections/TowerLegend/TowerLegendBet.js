@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { CgClose, CgCheck } from "react-icons/cg";
+import { useDispatch, useSelector } from "react-redux";
+import { changeBetAmt } from "../../features/towerLegend/towerLegendSlice";
 
-const TowerLegendBet = ({
-  betting,
-  sendMyBet,
-  bet,
-  setBet,
-  cashOutAmt,
-  cashoutAt,
-}) => {
+const TowerLegendBet = ({ sendMyBet, cashOutAmt }) => {
   const [slider, setSlider] = useState(false);
+  const dispatch = useDispatch();
+
+  const { betting, betAmt, cashoutAt } = useSelector(
+    (state) => state.towerLegend
+  );
 
   return (
     <div className='flex flex-col justify-top items-center h-full gap-8 py-10'>
@@ -20,11 +20,15 @@ const TowerLegendBet = ({
             disabled={betting}
             type='number'
             className={`bg-slate-800 p-2 rounded-full w-full pl-4 font-semibold disabled:opacity-75`}
-            value={bet}
-            onChange={(e) => setBet(e.target.value)}
-            onMouseOut={(e) => {
-              if (e.target.value === "" || e.target.value < 1) setBet(1);
-              if (e.target.value > 2000) setBet(2000);
+            value={betAmt}
+            onChange={(e) =>
+              dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }))
+            }
+            onBlur={(e) => {
+              if (e.target.value === "" || e.target.value < 1)
+                dispatch(changeBetAmt({ betAmt: parseFloat(1) }));
+              if (e.target.value > 200)
+                dispatch(changeBetAmt({ betAmt: parseFloat(200) }));
             }}
           />
           <div className='flex gap-0.5 child:bg-slate-600 absolute right-0 top-0 bottom-0 child:px-4 py-0.5 pr-0.5 child:font-semibold'>
@@ -32,9 +36,9 @@ const TowerLegendBet = ({
               disabled={betting}
               className='rounded-l-full'
               onClick={() => {
-                setBet((prevValue) =>
-                  prevValue === 200 || prevValue * 2 > 200 ? 200 : prevValue * 2
-                );
+                betAmt === 200 || betAmt * 2 > 200
+                  ? dispatch(changeBetAmt({ betAmt: parseFloat(200) }))
+                  : dispatch(changeBetAmt({ betAmt: parseFloat(betAmt * 2) }));
               }}
             >
               x2
@@ -42,9 +46,9 @@ const TowerLegendBet = ({
             <button
               disabled={betting}
               onClick={() => {
-                setBet((prevValue) =>
-                  prevValue === 100 || prevValue / 2 < 100 ? 100 : prevValue / 2
-                );
+                betAmt === 100 || betAmt / 2 < 100
+                  ? dispatch(changeBetAmt({ betAmt: parseFloat(100) }))
+                  : dispatch(changeBetAmt({ betAmt: parseFloat(betAmt / 2) }));
               }}
             >
               /2
@@ -71,8 +75,10 @@ const TowerLegendBet = ({
             style={{ transform: "translateY(1px)" }}
             min={100}
             max={200}
-            value={bet}
-            onChange={(e) => setBet(e.target.value)}
+            value={betAmt}
+            onChange={(e) =>
+              dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }))
+            }
           />
           <span>Max</span>
         </div>
@@ -100,7 +106,7 @@ const TowerLegendBet = ({
           onClick={cashOutAmt}
         >
           <p>Cash Out</p>
-          <p>{cashoutAt}</p>
+          <p>{cashoutAt.toFixed(2)}</p>
         </button>
       ) : (
         <button

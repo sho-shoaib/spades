@@ -22,7 +22,7 @@ const CrashBet = ({ sendMyBet, cashOut }) => {
           onClick={() => cashOut(betAmt * crashAtNo, crashAtNo)}
         >
           <p className='-mb-0.5'>Cash out</p>
-          <p>{betAmt * crashAtNo}</p>
+          <p>{(betAmt * crashAtNo).toFixed(2)}</p>
         </button>
       ) : crashed ? (
         <button className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'>
@@ -60,9 +60,9 @@ const CrashBet = ({ sendMyBet, cashOut }) => {
             }
             onBlur={(e) => {
               if (e.target.value === "" || e.target.value < 1)
-                dispatch(changeBetAmt({ betAmt: 1 }));
+                dispatch(changeBetAmt({ betAmt: parseFloat(1) }));
               if (e.target.value > 2000)
-                dispatch(changeBetAmt({ betAmt: 2000 }));
+                dispatch(changeBetAmt({ betAmt: parseFloat(2000) }));
             }}
           />
           <div className='flex gap-0.5 child:bg-slate-600 absolute right-0 top-0 bottom-0 child:px-4 py-0.5 pr-0.5 child:font-semibold'>
@@ -71,8 +71,8 @@ const CrashBet = ({ sendMyBet, cashOut }) => {
               className='rounded-l-full'
               onClick={() => {
                 betAmt === 2000 || betAmt * 2 > 2000
-                  ? dispatch(changeBetAmt({ betAmt: 2000 }))
-                  : dispatch(changeBetAmt({ betAmt: betAmt * 2 }));
+                  ? dispatch(changeBetAmt({ betAmt: parseFloat(2000) }))
+                  : dispatch(changeBetAmt({ betAmt: parseFloat(betAmt * 2) }));
               }}
             >
               x2
@@ -81,8 +81,8 @@ const CrashBet = ({ sendMyBet, cashOut }) => {
               disabled={betting}
               onClick={() => {
                 betAmt === 1 || betAmt / 2 < 1
-                  ? dispatch(changeBetAmt({ betAmt: 1 }))
-                  : dispatch(changeBetAmt({ betAmt: betAmt / 2 }));
+                  ? dispatch(changeBetAmt({ betAmt: parseFloat(1) }))
+                  : dispatch(changeBetAmt({ betAmt: parseFloat(betAmt / 2) }));
               }}
             >
               /2
@@ -109,7 +109,9 @@ const CrashBet = ({ sendMyBet, cashOut }) => {
             min={1}
             max={2000}
             value={betAmt}
-            onChange={(e) => dispatch(changeBetAmt({ betAmt: e.target.value }))}
+            onChange={(e) =>
+              dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }))
+            }
           />
           <span>Max</span>
         </div>
