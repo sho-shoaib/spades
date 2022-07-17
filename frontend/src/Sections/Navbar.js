@@ -62,6 +62,7 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
       setOpen(false);
     } 
     if (currency !== "" && amount !== 0) {
+      try{
       Swal.fire({
         icon: 'warning',
         title: 'Please wait while the transaction is in progress. Do not refresh the page.',
@@ -79,7 +80,7 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
       const reciept = await transfer.wait();
       if(reciept.status == true){
         axios.post(`${appConfig.API_HOST}user/user/addbalance`, {
-          "email": "sd1@sd.com",
+          "email": userEmail,
           "amount": (amount*10**18),
           "type": currency
         }).then((response)=>{console.log(response)
@@ -91,8 +92,8 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
           })
           //window.alert(amount+ " "+ currency + " has been deposited to your account. Your latest balance is "+(response.data.user[currency.toLowerCase()]/10**18)+'.')
         }).catch((err)=>console.log(err));
-        
-      }
+      } 
+      }catch(err){window.alert('Please Install Metamask Wallet')}
 
     }
   };
