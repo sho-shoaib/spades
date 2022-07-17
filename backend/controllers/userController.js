@@ -19,7 +19,7 @@ module.exports.login = async(req, res)=> {
         try{
             const user = await User.findOne(
                 { email },
-                'email password name'
+                'email password name balance eth'
               );
               if (!user) {
                 return res
@@ -35,7 +35,9 @@ module.exports.login = async(req, res)=> {
                     .send({         
                         _id: user._id,
                         email: user.email,
-                        name: user.name,})
+                        name: user.name,
+                        eth: user.eth,
+                      balance: user.balance})
                 } else {
                   console.log(500)
                   return res
@@ -120,10 +122,69 @@ module.exports.getBalance = async(req, res)=>{
   try{
     const user = await User.findOne(
       { email },
-      'email balance'
+      'email balance eth bnb matic busd usdt usdc wbnb wsol'
     );
-    return res.status(200).send({balance: user.balance})
+    return res.status(200).send({balance: user.balance,
+    eth: user.eth,
+    bnb: user.bnb,
+    matic: user.matic,
+    busd: user.busd,
+    usdt: user.usdt,
+    usdc: user.usdc,
+    wbnb: user.wbnb,
+    wsol: user.wsol,
+  })
   } catch(err){
     return res.status(500).send("Caught Error in finding user")
   }
+}
+
+module.exports.addBalance = async(req, res)=>{
+  const{email, amount, type} = req.body;
+  console.log(req.body);
+  const currency = type.toLowerCase()
+  try{
+      const user = await User.findOne(
+          { email },
+          'email balance eth bnb matic busd usdt usdc wbnb wsol'
+        );
+        console.log(user)
+        if (!user) {
+          return res
+            .status(404)
+            .send({ error: 'Could not find a user with that username.' });
+        }
+        else
+        {
+          user[currency]+=amount;
+          user.save()
+          return res.status(200).send({user})
+          
+        }
+        } catch(err){return res.status(500).send({error: err})}
+}
+
+module.exports.withdrawBalance = async(req, res)=>{
+  const{email, amount, type} = req.body;
+  console.log(req.body)
+  try{
+      const user = await User.findOne(
+          { email },
+          'email balance eth bnb matic busd usdt usdc wbnb wsol'
+        );
+
+        if (!user) {
+          return res
+            .status(404)
+            .send({ error: 'Could not find a user with that username.' });
+        }
+
+        {
+          user.type = user.type - amount;
+          await user.save();
+         return res.status(200).send("Amount Withdrawn Successfully");
+          }
+          
+        } catch(err){return res.status(500).send({error: err})}
+
 }

@@ -16,12 +16,17 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { socket } from "../App";
 import { Input, InputAdornment, TextField } from "@mui/material";
+import {ethers} from 'ethers';
+import contracts from './contractaddresses.json';
+import axios from "axios";
+import {appConfig} from './../appConfig';
+import Swal from 'sweetalert2'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
-const currencyOptions = ["$", "€", "฿", "₹"];
+const currencyOptions = ["ETH", "BNB", "MATIC", "WSOL", "WBNB", "BUSD", "USDT", "USDC"];
 
 const Navbar = ({ balance, refreshWallet, setBalance }) => {
   let navigate = useNavigate();
@@ -51,13 +56,44 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
       setOpen(false);
     }
   };
-
-  const handleCloseAdd = (event, reason) => {
-    if (reason !== "backdropClick") {
+  /* globals BigInt */
+  const handleCloseAdd = async (event, reason) => {
+   if (reason !== "backdropClick") {
       setOpen(false);
-    }
+    } 
     if (currency !== "" && amount !== 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Please wait while the transaction is in progress. Do not refresh the page.',
+        showConfirmButton: false,
+      })
       // User click OK with input
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const signer = provider.getSigner();
+      const address = await signer.getAddress()
+      console.log(address);
+      console.log(contracts[currency])
+      const contractIns =  new ethers.Contract(contracts[currency], contracts.abi, signer);
+      const transfer = await contractIns.functions.transfer("0x4345ad49121023CEd135835b44c93f9a6B7fA9E6", BigInt(amount*10**18));
+      console.log(transfer);
+      const reciept = await transfer.wait();
+      if(reciept.status == true){
+        axios.post(`${appConfig.API_HOST}user/user/addbalance`, {
+          "email": "sd1@sd.com",
+          "amount": (amount*10**18),
+          "type": currency
+        }).then((response)=>{console.log(response)
+          Swal.fire({
+            icon: 'success',
+            title: 'Voilà!',
+            text: amount+ " "+ currency + " has been deposited to your account. Your latest balance is "+(response.data.user[currency.toLowerCase()]/10**18).toFixed(2)+'.',
+            showConfirmButton: true,
+          })
+          //window.alert(amount+ " "+ currency + " has been deposited to your account. Your latest balance is "+(response.data.user[currency.toLowerCase()]/10**18)+'.')
+        }).catch((err)=>console.log(err));
+        
+      }
+
     }
   };
 
