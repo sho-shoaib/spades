@@ -149,7 +149,7 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
               </DialogContent>
               <DialogActions className='bg-slate-200'>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleCloseAdd}>Ok</Button>
+                <Button onClick={handleCloseAdd}>Deposit</Button>
               </DialogActions>
             </Dialog>
           </div>
