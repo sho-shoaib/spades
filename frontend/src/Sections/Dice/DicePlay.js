@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { changeUnderNo } from "../../features/dice/diceSlice";
+import {
+  changeMultiplier,
+  changeUnderNo,
+  changeWinAmt,
+} from "../../features/dice/diceSlice";
 import Slider from "react-input-slider";
 import tip from "../../assets/dice/dice_tip.png";
 import dice from "../../assets/dice/dice_dice.png";
 import winImg from "../../assets/dice/dice_win.png";
+import { diceMultipliers } from "../../Components/diceMultipliers";
 
 const DicePlay = () => {
   const dispatch = useDispatch();
-  const { win, landsOn } = useSelector((state) => state.dice);
+  const { win, landsOn, betAmt } = useSelector((state) => state.dice);
   const [state, setState] = useState({ x: 50 });
   const [display, setDisplay] = useState(false);
 
@@ -87,6 +92,12 @@ const DicePlay = () => {
                   if (x >= 2 && x <= 98) {
                     setState({ x });
                     dispatch(changeUnderNo({ underNo: x }));
+                    dispatch(
+                      changeMultiplier({ multiplier: diceMultipliers[x - 2] })
+                    );
+                    dispatch(
+                      changeWinAmt({ winAmt: diceMultipliers[x - 2] * betAmt })
+                    );
                   }
                 }}
                 xstep={1}

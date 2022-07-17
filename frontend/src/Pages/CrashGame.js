@@ -15,6 +15,7 @@ import {
   changeCashedOut,
   changeGameEnd,
 } from "../features/crash/crashSlice";
+import { rooms } from "../App";
 
 const CrashGame = ({ setBalance }) => {
   const { betAmt, canBet, betting, gameEnd } = useSelector(
@@ -28,6 +29,9 @@ const CrashGame = ({ setBalance }) => {
   const [cashedOut, setCashedOut] = useState(false);
 
   useEffect(() => {
+    rooms.map((item) => {
+      socket.emit("leave_room", { roomName: item });
+    });
     socket.emit("join_room", { roomName: "crash" });
   }, []);
 

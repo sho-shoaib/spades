@@ -65,14 +65,16 @@ function makeid(length) {
   return result;
 }
 
+let i = 1;
+
 // Crash
 const startGame = () => {
   gameStart = true;
-  var seed = Math.random().toString().slice(2, -1);
+  var seed = "9ed62d41d4a5b0dbf2c0d626bb78ad286431342adac221099a2eae33353f30a9";
   var salt = Math.random().toString().slice(2, -1);
-  var crashAt = crashResFinder(seed, salt);
+  var crashAt = crashResFinder(seed);
   console.log(crashAt);
-  let i = 1;
+  i = 1;
   function myLoop() {
     setTimeout(() => {
       crash_sendData = {
@@ -135,9 +137,11 @@ const runUp = () => {
 
 runUp();
 
+var speed = 100;
+
 setInterval(() => {
   io.to("crash").emit("crash_data", crash_sendData);
-}, 100);
+}, speed);
 
 // Tower legend function
 const difficulityOptions = [
@@ -183,6 +187,12 @@ io.on("connection", (socket) => {
   socket.on("join_room", ({ roomName }) => {
     socket.join(roomName);
     console.log(`${socket.id} joined ${roomName}`);
+  });
+
+  // Leave rooms
+  socket.on("leave_room", ({ roomName }) => {
+    socket.leave(roomName);
+    console.log(`${socket.id} left ${roomName}`);
   });
 
   // Bets
@@ -262,6 +272,20 @@ io.on("connection", (socket) => {
           .get(`http://localhost:3001/user/user/getbalance/${data.userEmail}`)
           .then((res) => {
             socket.emit("deducted_amt", { balance: res.data.balance });
+          });
+      });
+  });
+  socket.on("add_amt", (data) => {
+    axios
+      .post("http://localhost:3001/user/user/givewin", {
+        email: data.userEmail,
+        amount: data.betAmt,
+      })
+      .then(() => {
+        axios
+          .get(`http://localhost:3001/user/user/getbalance/${data.userEmail}`)
+          .then((res) => {
+            socket.emit("update_amt", { balance: res.data.balance });
           });
       });
   });
@@ -405,16 +429,22 @@ io.on("connection", (socket) => {
     let userFrom = data.from;
     let userTo = data.to;
     let win;
+    let game = data.game;
 
     if (landsOn >= userFrom && landsOn <= userTo) {
       win = true;
+      game += 1;
     } else {
       win = false;
+      game += 1;
     }
+
+    console.log(game);
 
     socket.emit("recieve dice data", {
       landsOn,
       win,
+      game,
     });
   });
 });

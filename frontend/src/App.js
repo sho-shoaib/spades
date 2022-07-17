@@ -17,6 +17,15 @@ import { useState } from "react";
 import { appConfig } from "./appConfig";
 import Wheel from "./Pages/Wheel";
 export const socket = io.connect(appConfig.API_HOST);
+export const rooms = [
+  "crash",
+  "coinFlip",
+  "dice",
+  "mines",
+  "slotMachine",
+  "towerLegend",
+  "wheel",
+];
 
 const App = () => {
   const userEmail = sessionStorage.useremail;

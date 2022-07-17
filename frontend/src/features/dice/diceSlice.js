@@ -6,7 +6,10 @@ const initialState = {
   underNo: 50,
   landsOn: 50,
   win: null,
-  cashoutAt: null,
+  cashoutAt: 0,
+  multiplier: 1.98,
+  winAmt: 100 * 1.98,
+  game: 0,
 };
 
 const diceSlice = createSlice({
@@ -29,13 +32,22 @@ const diceSlice = createSlice({
       state.win = payload.win;
     },
     changeCashoutAt: (state) => {
-      state.cashoutAt = (state.cashoutAt * 1.09).toFixed(2);
+      state.cashoutAt = state.winAmt;
     },
     initializeCashoutAt: (state) => {
       state.cashoutAt = state.betAmt;
     },
     refreshCashoutAt: (state) => {
-      state.cashoutAt = null;
+      state.cashoutAt = 0;
+    },
+    changeMultiplier: (state, { payload }) => {
+      state.multiplier = payload.multiplier;
+    },
+    changeWinAmt: (state, { payload }) => {
+      state.winAmt = payload.winAmt;
+    },
+    changeGame: (state, { payload }) => {
+      state.game = payload.game;
     },
   },
 });
@@ -49,5 +61,8 @@ export const {
   changeCashoutAt,
   initializeCashoutAt,
   refreshCashoutAt,
+  changeMultiplier,
+  changeWinAmt,
+  changeGame,
 } = diceSlice.actions;
 export default diceSlice.reducer;

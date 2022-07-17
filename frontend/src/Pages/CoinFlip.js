@@ -12,6 +12,7 @@ import {
   changeSeries,
   changeMultiplier,
 } from "../features/coinFlip/coinFlipSlice";
+import { rooms } from "../App";
 
 const CoinFlip = ({ refreshWallet, setBalance }) => {
   const userEmail = sessionStorage.useremail;
@@ -24,6 +25,9 @@ const CoinFlip = ({ refreshWallet, setBalance }) => {
 
   // join room
   useEffect(() => {
+    rooms.map((item) => {
+      socket.emit("leave_room", { roomName: item });
+    });
     socket.emit("join_room", { roomName: "coinFlip" });
   }, []);
 

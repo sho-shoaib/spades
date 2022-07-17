@@ -6,71 +6,64 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   changeBetting,
   changeCashoutAt,
+  changeGame,
   changeLandsOn,
   changeWin,
-  initializeCashoutAt,
+  changeWinAmt,
   refreshCashoutAt,
 } from "../features/dice/diceSlice";
+import { rooms } from "../App";
 
 const Dice = ({ setBalance }) => {
   const dispatch = useDispatch();
   const userEmail = sessionStorage.useremail;
   const userName = sessionStorage.userName;
 
-  const { betAmt, betting, underNo, win, cashoutAt } = useSelector(
+  const { betAmt, underNo, cashoutAt, winAmt, game, win } = useSelector(
     (state) => state.dice
   );
 
   useEffect(() => {
+    rooms.map((item) => {
+      socket.emit("leave_room", { roomName: item });
+    });
     socket.emit("join_room", { roomName: "dice" });
   }, []);
 
   useEffect(() => {
+    if (win === true) {
+      dispatch(changeCashoutAt());
+      socket.emit("send_reward", {
+        userEmail: userEmail,
+        betAmt: winAmt - betAmt,
+      });
+      socket.on("deducted_amt", (data) => {
+        setBalance(data.balance);
+      });
+    } else if (win === false) {
+      socket.emit("send_bet", {
+        roomName: "dice",
+        data: { userEmail, userName, betAmt },
+      });
+      socket.on("deducted_amt", (data) => {
+        setBalance(data.balance);
+      });
+    }
+  }, [game]);
+
+  const rollTheDice = () => {
+    socket.emit("get dice data", { from: 0, to: underNo, game: game });
     socket.on("recieve dice data", (data) => {
       dispatch(changeWin({ win: data.win }));
       dispatch(changeLandsOn({ landsOn: data.landsOn }));
-      if (data.win === true) {
-        dispatch(changeCashoutAt());
-      } else if (data.win === false) {
-        dispatch(changeBetting({ betting: false }));
-        dispatch(refreshCashoutAt());
-      }
+      dispatch(changeGame({ game: data.game }));
     });
-  }, [socket]);
-
-  const sendMyBet = () => {
-    dispatch(changeBetting({ betting: true }));
-    dispatch(initializeCashoutAt());
-    socket.emit("send_bet", {
-      roomName: "dice",
-      data: { userEmail, userName, betAmt },
-    });
-    socket.on("deducted_amt", (data) => {
-      setBalance(data.balance);
-    });
-  };
-
-  const rollTheDice = () => {
-    socket.emit("get dice data", { from: 0, to: underNo });
-  };
-
-  const executeCashout = () => {
-    socket.emit("send_reward", { userEmail, betAmt: parseFloat(cashoutAt) });
-    socket.on("deducted_amt", (data) => {
-      setBalance(data.balance);
-    });
-    dispatch(changeBetting({ betting: false }));
-    dispatch(refreshCashoutAt());
   };
 
   return (
     <div className='flex w-full py-10 px-5 gap-1 h-screen'>
       <div className='bg-slate-700 rounded-l-xl' style={{ width: "30%" }}>
-        <DiceBet
-          sendMyBet={sendMyBet}
-          rollTheDice={rollTheDice}
-          executeCashout={executeCashout}
-        />
+        <DiceBet rollTheDice={rollTheDice} />
       </div>
       <div
         className='bg-slate-600 rounded-r-xl flex justify-center items-center overflow-x-hidden'

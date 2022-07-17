@@ -12,6 +12,7 @@ import {
   changeGame,
   changeCheckWhat,
 } from "../features/towerLegend/towerLegendSlice";
+import { rooms } from "../App";
 
 function makeid(length) {
   var result = "";
@@ -35,6 +36,9 @@ const TowerLegend = ({ setBalance }) => {
   );
 
   useEffect(() => {
+    rooms.map((item) => {
+      socket.emit("leave_room", { roomName: item });
+    });
     socket.emit("join_room", { roomName: "tower-legend" });
   }, []);
 
@@ -82,7 +86,7 @@ const TowerLegend = ({ setBalance }) => {
         className='bg-slate-600 rounded-r-xl flex justify-center items-center'
         style={{ width: "70%" }}
       >
-        <TowerLegendPlay sendMyBet={sendMyBet} />
+        <TowerLegendPlay sendMyBet={sendMyBet} cashOutAmt={cashOutAmt} />
       </div>
     </div>
   );

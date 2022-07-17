@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeBetAmt } from "../../features/dice/diceSlice";
+import { changeBetAmt, changeWinAmt } from "../../features/dice/diceSlice";
 
-const DiceBet = ({ sendMyBet, executeCashout, rollTheDice }) => {
+const DiceBet = ({ rollTheDice }) => {
   const dispatch = useDispatch();
 
-  const { betting, cashoutAt, betAmt } = useSelector((state) => state.dice);
+  const { betting, cashoutAt, betAmt, multiplier, winAmt } = useSelector(
+    (state) => state.dice
+  );
 
   const [slider, setSlider] = useState(false);
   return (
@@ -21,11 +23,16 @@ const DiceBet = ({ sendMyBet, executeCashout, rollTheDice }) => {
             onChange={(e) =>
               dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }))
             }
-            onMouseOut={(e) => {
+            onBlur={(e) => {
               if (e.target.value === "" || e.target.value < 1)
-                dispatch(changeBetAmt({ betAmt: 100 }));
-              if (e.target.value > 2000)
-                dispatch(changeBetAmt({ betAmt: 15402 }));
+                dispatch(changeBetAmt({ betAmt: parseFloat(100) }));
+              dispatch(
+                changeWinAmt({
+                  winAmt: parseFloat(e.target.value) * multiplier,
+                })
+              );
+              if (e.target.value > 14664.603612)
+                dispatch(changeBetAmt({ betAmt: parseFloat(14664.603612) }));
             }}
           />
           <div className='flex gap-0.5 child:bg-slate-600 absolute right-0 top-0 bottom-0 child:px-4 py-0.5 pr-0.5 child:font-semibold'>
@@ -33,9 +40,21 @@ const DiceBet = ({ sendMyBet, executeCashout, rollTheDice }) => {
               disabled={betting}
               className='rounded-l-full'
               onClick={() => {
-                betAmt === 15402 || betAmt * 2 > 15402
-                  ? dispatch(changeBetAmt({ betAmt: 15402 }))
-                  : dispatch(changeBetAmt({ betAmt: betAmt * 2 }));
+                if (betAmt === 14664.603612 || betAmt * 2 > 14664.603612) {
+                  dispatch(changeBetAmt({ betAmt: parseFloat(14664.603612) }));
+                  dispatch(
+                    changeWinAmt({
+                      winAmt: parseFloat(14664.603612) * multiplier,
+                    })
+                  );
+                } else {
+                  dispatch(changeBetAmt({ betAmt: parseFloat(betAmt * 2) }));
+                  dispatch(
+                    changeWinAmt({
+                      winAmt: parseFloat(betAmt * 2) * multiplier,
+                    })
+                  );
+                }
               }}
             >
               x2
@@ -43,9 +62,21 @@ const DiceBet = ({ sendMyBet, executeCashout, rollTheDice }) => {
             <button
               disabled={betting}
               onClick={() => {
-                betAmt === 100 || betAmt / 2 < 100
-                  ? dispatch(changeBetAmt({ betAmt: 100 }))
-                  : dispatch(changeBetAmt({ betAmt: betAmt / 2 }));
+                if (betAmt === 100 || betAmt / 2 < 100) {
+                  dispatch(changeBetAmt({ betAmt: 100 }));
+                  dispatch(
+                    changeWinAmt({
+                      winAmt: parseFloat(100) * multiplier,
+                    })
+                  );
+                } else {
+                  dispatch(changeBetAmt({ betAmt: betAmt / 2 }));
+                  dispatch(
+                    changeWinAmt({
+                      winAmt: parseFloat(betAmt / 2) * multiplier,
+                    })
+                  );
+                }
               }}
             >
               /2
@@ -60,7 +91,7 @@ const DiceBet = ({ sendMyBet, executeCashout, rollTheDice }) => {
           </div>
         </div>
         <span className='text-white opacity-80 ml-4'>
-          Bet range: 100 - 15402
+          Bet range: 100 - 14664.7
         </span>
         <div
           className={`flex items-center gap-1.5 ml-4 ${
@@ -73,44 +104,42 @@ const DiceBet = ({ sendMyBet, executeCashout, rollTheDice }) => {
             type='range'
             style={{ transform: "translateY(1px)" }}
             min={100}
-            max={15402}
+            max={14664.603612}
             value={betAmt}
-            onChange={(e) =>
-              dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }))
-            }
+            onChange={(e) => {
+              dispatch(changeBetAmt({ betAmt: parseFloat(e.target.value) }));
+              dispatch(
+                changeWinAmt({
+                  winAmt: parseFloat(e.target.value) * multiplier,
+                })
+              );
+            }}
           />
           <span>Max</span>
         </div>
       </div>
       <button
-        className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72 disabled:opacity-75'
         onClick={rollTheDice}
-        disabled={!betting}
+        className='bg-orange-500 py-2 px-5 rounded-full py-4 w-72 disabled:opacity-75'
       >
-        Roll Now
+        <p className='text-xl font-semibold'>Roll Now</p>
       </button>
-      {betting ? (
-        <button
-          onClick={executeCashout}
-          className='bg-orange-500 py-2 px-5 rounded-full py-4 w-72 disabled:opacity-75'
-        >
-          {cashoutAt === betAmt ? (
-            <p className='text-xl font-semibold'>Cancel</p>
-          ) : (
-            <>
-              <p className='text-xl font-semibold'>Cash Out</p>
-              <p className='text-xl font-semibold'>{cashoutAt}</p>
-            </>
-          )}
-        </button>
-      ) : (
-        <button
-          onClick={sendMyBet}
-          className='bg-orange-500 py-2 px-5 rounded-full py-4 w-72 disabled:opacity-75'
-        >
-          <p className='text-xl font-semibold'>Bet</p>
-        </button>
-      )}
+      <div className='w-72 flex flex-col gap-2'>
+        <div className='px-3'>
+          <span className=' opacity-90 text-base'>Win amount:</span>
+        </div>
+        <div className='py-2 px-4 bg-slate-900 rounded-full'>
+          <span>{winAmt.toFixed(2)}</span>
+        </div>
+      </div>
+      <div className='w-72 flex flex-col gap-2'>
+        <div className='px-3'>
+          <span className=' opacity-90 text-base'>Payout:</span>
+        </div>
+        <div className='py-2 px-4 bg-slate-900 rounded-full'>
+          <span>{multiplier.toFixed(4)}x</span>
+        </div>
+      </div>
     </div>
   );
 };

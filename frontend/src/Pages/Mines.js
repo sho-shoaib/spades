@@ -13,6 +13,7 @@ import {
   changeTotalProfit,
 } from "../features/mines/minesSlice";
 import minesBg from "../assets/mines/bg_mines.jpg";
+import { rooms } from "../App";
 
 const Mines = ({ setBalance }) => {
   const userEmail = sessionStorage.useremail;
@@ -23,6 +24,9 @@ const Mines = ({ setBalance }) => {
   );
 
   useEffect(() => {
+    rooms.map((item) => {
+      socket.emit("leave_room", { roomName: item });
+    });
     socket.emit("join_room", { roomName: "mines" });
   }, []);
 

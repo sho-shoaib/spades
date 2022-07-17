@@ -10,6 +10,8 @@ const initialState = {
   gameEnd: false,
   looseText: "",
   cashoutAt: 0,
+  multipliers: [0.0, 13.18, 9.88, 7.41, 5.56, 4.17, 3.12, 2.34, 1.76, 1.32],
+  row: 0,
 };
 
 const towerLegendSlice = createSlice({

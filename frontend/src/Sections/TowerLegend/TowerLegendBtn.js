@@ -9,13 +9,12 @@ import {
 } from "../../features/towerLegend/towerLegendSlice";
 var CryptoJS = require("crypto-js");
 
-const TowerLegendBtn = ({ rowNo, btnNo, setCurrRow, currRow }) => {
+const TowerLegendBtn = ({ rowNo, btnNo, setCurrRow, currRow, cashOutAmt }) => {
   const [res, setRes] = useState("slate");
   const dispatch = useDispatch();
 
-  const { betAmt, betting, loading, checkWhat, game, cashoutAt } = useSelector(
-    (state) => state.towerLegend
-  );
+  const { cashoutAt, betting, loading, checkWhat, game, betAmt, multipliers } =
+    useSelector((state) => state.towerLegend);
 
   const checkIf = (clickedOn, row) => {
     let checked = 0;
@@ -32,12 +31,19 @@ const TowerLegendBtn = ({ rowNo, btnNo, setCurrRow, currRow }) => {
     } else {
       setCurrRow(currRow - 1);
       setRes("green");
-      dispatch(changeCashoutAt({ cashoutAt: cashoutAt * 1.02 }));
-    }
-    if (currRow === 1) {
-      dispatch(changeBetting({ betting: false }));
-      dispatchEvent(changeGameEnd({ gameEnd: true }));
-      dispatch(changelooseText({ looseText: "Congratulations! You Won" }));
+      dispatch(changeCashoutAt({ cashoutAt: betAmt * multipliers[row] }));
+      if (currRow === 1) {
+        dispatch(changeCashoutAt({ cashoutAt: betAmt * multipliers[1] }));
+        cashOutAmt();
+        dispatch(changeGameEnd({ gameEnd: true }));
+        dispatch(
+          changelooseText({
+            looseText: `Congratulations! You Won ${(
+              betAmt * multipliers[1]
+            ).toFixed(2)}`,
+          })
+        );
+      }
     }
   };
 
@@ -53,7 +59,7 @@ const TowerLegendBtn = ({ rowNo, btnNo, setCurrRow, currRow }) => {
         res === "slate" && "disabled:hover:bg-slate-600"
       } ${res === "red" && "bg-red-400"} ${res === "green" && "bg-green-400"} ${
         res === "slate" && "bg-slate-600"
-      }`}
+      } border-t-2 z-10 border-slate-500`}
       disabled={!betting || loading || rowNo !== currRow}
       onClick={() => checkIf(btnNo, rowNo)}
     >

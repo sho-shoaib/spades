@@ -14,6 +14,7 @@ import {
   changeEqualTerms,
 } from "../features/slotMachine/slotMachineSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { rooms } from "../App";
 
 const SlotMachine = ({ setBalance }) => {
   const dispatch = useDispatch();
@@ -57,17 +58,6 @@ const SlotMachine = ({ setBalance }) => {
     socket.emit("get slotMachine data");
   };
 
-  // useEffect(() => {
-  //   if (lost) {
-  //     setBetting(false);
-  //     setCashoutAt(0);
-  //   } else if (!lost && !jackpot) {
-  //     setCashoutAt((prev) => prev * 1.02);
-  //   } else if (jackpot) {
-  //     setCashoutAt((prev) => prev * 1.5);
-  //   }
-  // }, [lost, jackpot]);
-
   const executeCashout = () => {
     socket.emit("send_reward", { userEmail, betAmt: parseFloat(cashoutAt) });
     socket.on("deducted_amt", (data) => {
@@ -78,6 +68,9 @@ const SlotMachine = ({ setBalance }) => {
   };
 
   useEffect(() => {
+    rooms.map((item) => {
+      socket.emit("leave_room", { roomName: item });
+    });
     socket.emit("join_room", { roomName: "slot-machine" });
   }, []);
 
