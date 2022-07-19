@@ -16,17 +16,28 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { socket } from "../App";
 import { Input, InputAdornment, TextField } from "@mui/material";
-import {ethers} from 'ethers';
-import contracts from './contractaddresses.json';
+import { ethers } from "ethers";
+import contracts from "./contractaddresses.json";
 import axios from "axios";
-import {appConfig} from './../appConfig';
-import Swal from 'sweetalert2'
+import { appConfig } from "./../appConfig";
+import Swal from "sweetalert2";
+import WalletMore from "../Components/WalletMore";
+import BalanceWallet from "../Components/navbar/BalanceWallet";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
-const currencyOptions = ["ETH", "BNB", "MATIC", "WSOL", "WBNB", "BUSD", "USDT", "USDC"];
+const currencyOptions = [
+  "ETH",
+  "BNB",
+  "MATIC",
+  "WSOL",
+  "WBNB",
+  "BUSD",
+  "USDT",
+  "USDC",
+];
 
 const Navbar = ({ balance, refreshWallet, setBalance }) => {
   let navigate = useNavigate();
@@ -35,19 +46,19 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
 
   const [open, setOpen] = React.useState(false);
   const [currency, setCurrency] = React.useState("$");
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("");
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
   const handleChange = (type, event) => {
     if (type === "currency") {
       setCurrency(event.target.value || "$");
     } else if (type === "amount") {
-      setAmount(Number(event.target.value) || 0);
+      setAmount(Number(event.target.value) || "");
     }
   };
 
   const handleClickOpen = () => {
-    setAmount(0);
+    setAmount("");
     setOpen(true);
   };
 
@@ -58,43 +69,65 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
   };
   /* globals BigInt */
   const handleCloseAdd = async (event, reason) => {
-   if (reason !== "backdropClick") {
+    if (reason !== "backdropClick") {
       setOpen(false);
-    } 
-    if (currency !== "" && amount !== 0) {
-      try{
-      Swal.fire({
-        icon: 'warning',
-        title: 'Please wait while the transaction is in progress. Do not refresh the page.',
-        showConfirmButton: false,
-      })
-      // User click OK with input
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const signer = provider.getSigner();
-      const address = await signer.getAddress()
-      console.log(address);
-      console.log(contracts[currency])
-      const contractIns =  new ethers.Contract(contracts[currency], contracts.abi, signer);
-      const transfer = await contractIns.functions.transfer("0x4345ad49121023CEd135835b44c93f9a6B7fA9E6", BigInt(amount*10**18));
-      console.log(transfer);
-      const reciept = await transfer.wait();
-      if(reciept.status == true){
-        axios.post(`${appConfig.API_HOST}user/user/addbalance`, {
-          "email": userEmail,
-          "amount": (amount*10**18),
-          "type": currency
-        }).then((response)=>{console.log(response)
-          Swal.fire({
-            icon: 'success',
-            title: 'Voilà!',
-            text: amount+ " "+ currency + " has been deposited to your account. Your latest balance is "+(response.data.user[currency.toLowerCase()]/10**18).toFixed(2)+'.',
-            showConfirmButton: true,
-          })
-          //window.alert(amount+ " "+ currency + " has been deposited to your account. Your latest balance is "+(response.data.user[currency.toLowerCase()]/10**18)+'.')
-        }).catch((err)=>console.log(err));
-      } 
-      }catch(err){window.alert('Please Install Metamask Wallet')}
-
+    }
+    if (currency !== "" && amount !== 0 && amount !== "") {
+      try {
+        Swal.fire({
+          icon: "warning",
+          title:
+            "Please wait while the transaction is in progress. Do not refresh the page.",
+          showConfirmButton: false,
+        });
+        // User click OK with input
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+        console.log(address);
+        console.log(contracts[currency]);
+        const contractIns = new ethers.Contract(
+          contracts[currency],
+          contracts.abi,
+          signer
+        );
+        const transfer = await contractIns.functions.transfer(
+          "0x4345ad49121023CEd135835b44c93f9a6B7fA9E6",
+          BigInt(amount * 10 ** 18)
+        );
+        console.log(transfer);
+        const reciept = await transfer.wait();
+        if (reciept.status == true) {
+          axios
+            .post(`${appConfig.API_HOST}user/user/addbalance`, {
+              email: userEmail,
+              amount: amount * 10 ** 18,
+              type: currency,
+            })
+            .then((response) => {
+              console.log(response);
+              Swal.fire({
+                icon: "success",
+                title: "Voilà!",
+                text:
+                  amount +
+                  " " +
+                  currency +
+                  " has been deposited to your account. Your latest balance is " +
+                  (
+                    response.data.user[currency.toLowerCase()] /
+                    10 ** 18
+                  ).toFixed(2) +
+                  ".",
+                showConfirmButton: true,
+              });
+              //window.alert(amount+ " "+ currency + " has been deposited to your account. Your latest balance is "+(response.data.user[currency.toLowerCase()]/10**18)+'.')
+            })
+            .catch((err) => console.log(err));
+        }
+      } catch (err) {
+        window.alert("Please Install Metamask Wallet");
+      }
     }
   };
 
@@ -111,7 +144,10 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
   }, []);
 
   return (
-    <div className='h-16 w-full sticky top-0 bg-slate-900 flex items-center justify-between px-10  border-b-2 border-slate-700'>
+    <div
+      className='h-16 w-full sticky top-0 flex items-center justify-between px-10 drop-shadow-xl'
+      style={{ backgroundColor: "#24262B" }}
+    >
       <h1
         className='font-semibold text-2xl cursor-pointer'
         onClick={() => navigate("/")}
@@ -119,7 +155,8 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
         SPADES
       </h1>
       {userEmail || userName ? (
-        <div className='flex gap-8'>
+        <div className='flex gap-8 h-full py-2.5'>
+          <BalanceWallet />
           <div className='bg-slate-600 rounded-full pr-3.5 flex items-center gap-2 pl-0.5 py-0.5'>
             <div className='rounded-full p-2 bg-slate-500'>
               <FaDollarSign />
@@ -128,6 +165,7 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
               {balance.toFixed(2)}
             </p>
           </div>
+          <WalletMore />
           <div>
             <button
               onClick={handleClickOpen}
@@ -144,12 +182,11 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
                   component='form'
                   sx={{ display: "flex", flexWrap: "wrap" }}
                 >
-                  <FormControl sx={{ m: 1, minWidth: 200 }}>
-                    <InputLabel htmlFor='standard-adornment-amount'>
-                      Amount
-                    </InputLabel>
+                  {/* <FormControl sx={{ m: 1, minWidth: 200 }}>
+                    <InputLabel htmlFor='amount'>Amount</InputLabel>
                     <Input
-                      id='standard-adornment-amount'
+                      id='amount'
+                      type='number'
                       value={amount}
                       onChange={(e) => handleChange("amount", e)}
                       startAdornment={
@@ -158,7 +195,16 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
                         </InputAdornment>
                       }
                     />
-                  </FormControl>
+                  </FormControl> */}
+                  <TextField
+                    id='standard-basic'
+                    label='Amount'
+                    variant='standard'
+                    style={{
+                      m: 1,
+                      minWidth: 200,
+                    }}
+                  />
                   <FormControl sx={{ m: 1, minWidth: 200 }}>
                     <InputLabel id='demo-dialog-select-label'>
                       Currency

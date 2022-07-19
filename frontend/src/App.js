@@ -1,7 +1,7 @@
 import Home from "./Pages/Home";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import axios from "axios";
-import Sidebar from "./Sections/Sidebar";
+import DrawerMain from "./Sections/DrawerMain";
 import CrashGame from "./Pages/CrashGame";
 import CoinFlip from "./Pages/CoinFlip";
 import io from "socket.io-client";
@@ -48,7 +48,7 @@ const App = () => {
       </Routes>
       <div className='flex'>
         {location.pathname != "/login" && location.pathname != "/signup" && (
-          <Sidebar />
+          <DrawerMain />
         )}
         <div className='w-full'>
           {location.pathname != "/login" && location.pathname != "/signup" && (
