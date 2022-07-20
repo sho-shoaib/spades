@@ -6,6 +6,10 @@ import ListItemButton from "@mui/material/ListItemButton";
 const coins = ["ETH", "BNB", "MATIC", "WSOL", "WBNB", "BUSD", "USDT", "USDC"];
 
 const CurrencyMenuItem = ({ anchorEl, open, handleClose }) => {
+  const handleCoinClick = () => {
+    handleClose();
+  };
+
   return (
     <Popover
       open={open}
@@ -15,6 +19,7 @@ const CurrencyMenuItem = ({ anchorEl, open, handleClose }) => {
         vertical: "bottom",
         horizontal: "left",
       }}
+      className='-translate-x-10 translate-y-3'
     >
       <div
         className='w-full h-full rounded px-5 py-3 text-white'
@@ -26,9 +31,13 @@ const CurrencyMenuItem = ({ anchorEl, open, handleClose }) => {
         <List>
           {coins.map((coin, i) => {
             return (
-              <ListItemButton key={i} disablePadding>
+              <ListItemButton
+                key={i}
+                disablePadding
+                onClick={() => handleCoinClick()}
+              >
                 <div
-                  className='flex items-center justify-between gap-24 w-full'
+                  className='flex items-center justify-between gap-28 w-full'
                   key={i}
                 >
                   <p className='text-md font-semibold'>{coin}</p>

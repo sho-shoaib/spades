@@ -21,7 +21,6 @@ import contracts from "./contractaddresses.json";
 import axios from "axios";
 import { appConfig } from "./../appConfig";
 import Swal from "sweetalert2";
-import WalletMore from "../Components/WalletMore";
 import BalanceWallet from "../Components/navbar/BalanceWallet";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -165,7 +164,6 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
               {balance.toFixed(2)}
             </p>
           </div>
-          <WalletMore />
           <div>
             <button
               onClick={handleClickOpen}

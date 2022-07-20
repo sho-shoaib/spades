@@ -3,10 +3,12 @@ import ether from "../../assets/coins/ether.png";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CurrencyMenuItem from "./CurrencyMenuItem";
+import WalletDepositModal from "./WalletDepositModal";
 
 const BalanceWallet = () => {
   const [anchorCurrencyEl, setAnchorCurrencyEl] = useState(null);
   const openCurrencyEl = Boolean(anchorCurrencyEl);
+  const [openWallet, setOpenWallet] = useState(false);
 
   const handleCurrencyEl = (event) => {
     setAnchorCurrencyEl(event.currentTarget);
@@ -14,6 +16,9 @@ const BalanceWallet = () => {
   const handleCloseCurrencyEl = () => {
     setAnchorCurrencyEl(null);
   };
+
+  const handleOpenWallet = () => setOpenWallet(true);
+  const handleCloseWallet = () => setOpenWallet(false);
 
   return (
     <div
@@ -51,11 +56,16 @@ const BalanceWallet = () => {
         <button
           className='h-full px-4 rounded-full text-base font-bold flex items-center gap-1 text-gray-100'
           style={{ backgroundColor: "#5F22D1" }}
+          onClick={handleOpenWallet}
         >
           <AccountBalanceWalletIcon fontSize='medium' />
           WALLET
         </button>
       </div>
+      <WalletDepositModal
+        openWallet={openWallet}
+        handleCloseWallet={handleCloseWallet}
+      />
     </div>
   );
 };
