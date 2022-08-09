@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeBetAmt, changeWinAmt } from "../../features/dice/diceSlice";
 
-const DiceBet = ({ rollTheDice }) => {
+const DiceBet = ({ rollTheDice, rolling }) => {
   const dispatch = useDispatch();
 
   const { betting, cashoutAt, betAmt, multiplier, winAmt } = useSelector(
@@ -120,6 +120,7 @@ const DiceBet = ({ rollTheDice }) => {
       </div>
       <button
         onClick={rollTheDice}
+        disabled={rolling}
         className='bg-orange-500 py-2 px-5 rounded-full py-4 w-72 disabled:opacity-75'
       >
         <p className='text-xl font-semibold'>Roll Now</p>

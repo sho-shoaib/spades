@@ -145,7 +145,7 @@ const Navbar = ({ balance, refreshWallet, setBalance }) => {
   return (
     <div
       className='h-16 w-full sticky top-0 flex items-center justify-between px-10 drop-shadow-xl'
-      style={{ backgroundColor: "#24262B" }}
+      style={{ backgroundColor: "#24262B", zIndex: 20 }}
     >
       <h1
         className='font-semibold text-2xl cursor-pointer'

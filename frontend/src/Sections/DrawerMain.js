@@ -2,21 +2,67 @@ import { IconButton } from "@mui/material";
 import React, { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
-import ListSubheader from "@mui/material/ListSubheader";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import DraftsIcon from "@mui/icons-material/Drafts";
-import SendIcon from "@mui/icons-material/Send";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import StarBorder from "@mui/icons-material/StarBorder";
 import HomeIcon from "@mui/icons-material/Home";
 import CasinoIcon from "@mui/icons-material/Casino";
-import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import crashIcon from "../assets/crash/crash_logo.jpg";
+import coinFlipIcon from "../assets/coinFlip/coinFlip_logo.jpg";
+import diceIcon from "../assets/dice/dice_logo.png";
+import minesIcon from "../assets/mines/mines_logo.png";
+import slotMachineIcon from "../assets/slotMachine/slotMachine_logo.jpg";
+import wheelIcon from "../assets/wheel/wheel_logo.png";
+import towerLegendIcon from "../assets/towerLegend/towerLegend_logo.jpeg";
+
+const data = [
+  {
+    name: "crash",
+    primary: "Crash",
+    icons: crashIcon,
+    alt: "crashIcon",
+  },
+  {
+    name: "coinflip",
+    primary: "Coin Flip",
+    icons: coinFlipIcon,
+    alt: "coinFlipIcon",
+  },
+  {
+    name: "mines",
+    primary: "Mines",
+    icons: minesIcon,
+    alt: "minesIcon",
+  },
+  {
+    name: "tower-legend",
+    primary: "Tower Legend",
+    icons: towerLegendIcon,
+    alt: "towerLegendIcon",
+  },
+  {
+    name: "slot-machine",
+    primary: "Slot Machine",
+    icons: slotMachineIcon,
+    alt: "slotMachineIcon",
+  },
+  {
+    name: "dice",
+    primary: "dice",
+    icons: diceIcon,
+    alt: "diceIcon",
+  },
+  {
+    name: "wheel",
+    primary: "wheel",
+    icons: wheelIcon,
+    alt: "wheelIcon",
+  },
+];
 
 const DrawerMain = () => {
   const [fullDrawer, setFullDrawer] = useState(true);
@@ -33,8 +79,8 @@ const DrawerMain = () => {
     <div
       className={`${
         fullDrawer ? "w-72" : "w-20 flex flex-col items-center"
-      } h-screen transition-all`}
-      style={{ backgroundColor: "#1E2024" }}
+      } h-screen transition-all sticky top-0 bottom-0 left-0`}
+      style={{ backgroundColor: "#1E2024", zIndex: 30 }}
     >
       <div className='flex items-center justify-between'>
         <p
@@ -84,109 +130,45 @@ const DrawerMain = () => {
             </ListItemButton>
             <Collapse in={open} timeout='auto' unmountOnExit>
               <List component='div' disablePadding>
-                <ListItemButton
-                  sx={{ pl: 4 }}
-                  onClick={() => handleClick("crash")}
-                >
-                  <ListItemIcon>
-                    <QuestionMarkIcon className='text-white' />
-                  </ListItemIcon>
-                  <ListItemText primary='Crash' />
-                </ListItemButton>
-                <ListItemButton
-                  sx={{ pl: 4 }}
-                  onClick={() => handleClick("coinflip")}
-                >
-                  <ListItemIcon>
-                    <QuestionMarkIcon className='text-white' />
-                  </ListItemIcon>
-                  <ListItemText primary='Coin Flip' />
-                </ListItemButton>
-                <ListItemButton
-                  sx={{ pl: 4 }}
-                  onClick={() => handleClick("mines")}
-                >
-                  <ListItemIcon>
-                    <QuestionMarkIcon className='text-white' />
-                  </ListItemIcon>
-                  <ListItemText primary='Mines' />
-                </ListItemButton>
-                <ListItemButton
-                  sx={{ pl: 4 }}
-                  onClick={() => handleClick("tower-legend")}
-                >
-                  <ListItemIcon>
-                    <QuestionMarkIcon className='text-white' />
-                  </ListItemIcon>
-                  <ListItemText primary='Tower Legend' />
-                </ListItemButton>
-                <ListItemButton
-                  sx={{ pl: 4 }}
-                  onClick={() => handleClick("slot-machine")}
-                >
-                  <ListItemIcon>
-                    <QuestionMarkIcon className='text-white' />
-                  </ListItemIcon>
-                  <ListItemText primary='Slot Machine' />
-                </ListItemButton>
-                <ListItemButton
-                  sx={{ pl: 4 }}
-                  onClick={() => handleClick("dice")}
-                >
-                  <ListItemIcon>
-                    <QuestionMarkIcon className='text-white' />
-                  </ListItemIcon>
-                  <ListItemText primary='Dice' />
-                </ListItemButton>
-                <ListItemButton
-                  sx={{ pl: 4 }}
-                  onClick={() => handleClick("wheel")}
-                >
-                  <ListItemIcon>
-                    <QuestionMarkIcon className='text-white' />
-                  </ListItemIcon>
-                  <ListItemText primary='Wheel' />
-                </ListItemButton>
+                {data.map((item) => {
+                  return (
+                    <ListItemButton
+                      sx={{ pl: 4 }}
+                      onClick={() => handleClick(`${item.name}`)}
+                    >
+                      <ListItemIcon>
+                        <div className='w-10 rounded-full overflow-hidden'>
+                          <img
+                            src={item.icons}
+                            alt={`${item.alt}`}
+                            className='w-full h-full'
+                          />
+                        </div>
+                      </ListItemIcon>
+                      <ListItemText primary={`${item.primary}`} />
+                    </ListItemButton>
+                  );
+                })}
               </List>
             </Collapse>
           </>
         ) : (
           <>
-            <ListItemButton onClick={() => handleClick("crash")}>
-              <ListItemIcon>
-                <QuestionMarkIcon className='text-white transition-all translate-x-3' />
-              </ListItemIcon>
-            </ListItemButton>
-            <ListItemButton onClick={() => handleClick("coinflip")}>
-              <ListItemIcon>
-                <QuestionMarkIcon className='text-white transition-all translate-x-3' />
-              </ListItemIcon>
-            </ListItemButton>
-            <ListItemButton onClick={() => handleClick("mines")}>
-              <ListItemIcon>
-                <QuestionMarkIcon className='text-white transition-all translate-x-3' />
-              </ListItemIcon>
-            </ListItemButton>
-            <ListItemButton onClick={() => handleClick("tower-legend")}>
-              <ListItemIcon>
-                <QuestionMarkIcon className='text-white transition-all translate-x-3' />
-              </ListItemIcon>
-            </ListItemButton>
-            <ListItemButton onClick={() => handleClick("slot-machine")}>
-              <ListItemIcon>
-                <QuestionMarkIcon className='text-white transition-all translate-x-3' />
-              </ListItemIcon>
-            </ListItemButton>
-            <ListItemButton onClick={() => handleClick("dice")}>
-              <ListItemIcon>
-                <QuestionMarkIcon className='text-white transition-all translate-x-3' />
-              </ListItemIcon>
-            </ListItemButton>
-            <ListItemButton onClick={() => handleClick("wheel")}>
-              <ListItemIcon>
-                <QuestionMarkIcon className='text-white transition-all translate-x-3' />
-              </ListItemIcon>
-            </ListItemButton>
+            {data.map((item) => {
+              return (
+                <ListItemButton onClick={() => handleClick(`${item.name}`)}>
+                  <ListItemIcon>
+                    <div className='w-10 rounded-full overflow-hidden'>
+                      <img
+                        src={item.icons}
+                        alt={`${item.alt}`}
+                        className='w-full h-full'
+                      />
+                    </div>
+                  </ListItemIcon>
+                </ListItemButton>
+              );
+            })}
           </>
         )}
       </List>

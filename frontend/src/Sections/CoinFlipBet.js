@@ -100,20 +100,23 @@ const CoinFlipBet = ({ loading, sendMyChoice, executeBet, executeCashout }) => {
       </div>
       <div className='flex child:rounded-full child:py-4 child:flex-1 child:bg-orange-500 child:text-lg child:font-semibold w-full px-10 gap-4'>
         {betting ? (
-          <button
-            onClick={executeCashout}
-            disabled={loading}
-            className='disabled:opacity-75'
-          >
-            {cashoutAt === betAmt ? (
-              <p className='text-xl font-semibold'>Cancel</p>
-            ) : (
-              <>
-                <p className='text-xl font-semibold'>Cash Out</p>
-                <p className='text-xl font-semibold'>{cashoutAt.toFixed(2)}</p>
-              </>
-            )}
-          </button>
+          cashoutAt === betAmt ? (
+            <button
+              disabled={true}
+              className=' disabled:opacity-70 cursor-not-allowed'
+            >
+              <p className='text-xl font-semibold '>Cash out</p>
+            </button>
+          ) : (
+            <button
+              onClick={executeCashout}
+              disabled={loading}
+              className='disabled:opacity-75'
+            >
+              <p className='text-xl font-semibold'>Cash Out</p>
+              <p className='text-xl font-semibold'>{cashoutAt.toFixed(2)}</p>
+            </button>
+          )
         ) : (
           <button
             onClick={executeBet}

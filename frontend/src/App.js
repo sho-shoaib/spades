@@ -16,6 +16,7 @@ import Navbar from "./Sections/Navbar";
 import { useState } from "react";
 import { appConfig } from "./appConfig";
 import Wheel from "./Pages/Wheel";
+import { Container } from "@mui/system";
 export const socket = io.connect(appConfig.API_HOST);
 export const rooms = [
   "crash",
@@ -46,115 +47,121 @@ const App = () => {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignUpPage />} />
       </Routes>
-      <div className='flex'>
-        {location.pathname != "/login" && location.pathname != "/signup" && (
-          <DrawerMain />
-        )}
-        <div className='w-full'>
+      <Container
+        sx={{ paddingLeft: "0px !important", paddingRight: "0px !important" }}
+        maxWidth='xl'
+      >
+        <div className='flex'>
           {location.pathname != "/login" && location.pathname != "/signup" && (
-            <Navbar
-              balance={balance}
-              refreshWallet={refreshWallet}
-              setBalance={setBalance}
-            />
+            <DrawerMain />
           )}
-          <Routes>
-            <Route
-              exact
-              path='/'
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/crash'
-              element={
-                <ProtectedRoute>
-                  <CrashGame
-                    balance={balance}
-                    refreshWallet={refreshWallet}
-                    setBalance={setBalance}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/coinflip'
-              element={
-                <ProtectedRoute>
-                  <CoinFlip
-                    balance={balance}
-                    refreshWallet={refreshWallet}
-                    setBalance={setBalance}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/mines'
-              element={
-                <ProtectedRoute>
-                  <Mines
-                    balance={balance}
-                    refreshWallet={refreshWallet}
-                    setBalance={setBalance}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/tower-legend'
-              element={
-                <ProtectedRoute>
-                  <TowerLegend
-                    balance={balance}
-                    refreshWallet={refreshWallet}
-                    setBalance={setBalance}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='slot-machine'
-              element={
-                <ProtectedRoute>
-                  <SlotMachine
-                    balance={balance}
-                    refreshWallet={refreshWallet}
-                    setBalance={setBalance}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/dice'
-              element={
-                <ProtectedRoute>
-                  <Dice
-                    balance={balance}
-                    refreshWallet={refreshWallet}
-                    setBalance={setBalance}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/wheel'
-              element={
-                <ProtectedRoute>
-                  <Wheel
-                    balance={balance}
-                    refreshWallet={refreshWallet}
-                    setBalance={setBalance}
-                  />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
+          <div className='w-full'>
+            {location.pathname != "/login" &&
+              location.pathname != "/signup" && (
+                <Navbar
+                  balance={balance}
+                  refreshWallet={refreshWallet}
+                  setBalance={setBalance}
+                />
+              )}
+            <Routes>
+              <Route
+                exact
+                path='/'
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/crash'
+                element={
+                  <ProtectedRoute>
+                    <CrashGame
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/coinflip'
+                element={
+                  <ProtectedRoute>
+                    <CoinFlip
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/mines'
+                element={
+                  <ProtectedRoute>
+                    <Mines
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/tower-legend'
+                element={
+                  <ProtectedRoute>
+                    <TowerLegend
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='slot-machine'
+                element={
+                  <ProtectedRoute>
+                    <SlotMachine
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/dice'
+                element={
+                  <ProtectedRoute>
+                    <Dice
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/wheel'
+                element={
+                  <ProtectedRoute>
+                    <Wheel
+                      balance={balance}
+                      refreshWallet={refreshWallet}
+                      setBalance={setBalance}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

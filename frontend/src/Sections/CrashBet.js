@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeBetAmt } from "../features/crash/crashSlice";
 
-const CrashBet = ({ sendMyBet, cashOut }) => {
+const CrashBet = ({
+  sendMyBet,
+  cashOut,
+  sendBetNextRound,
+  bettingNextRound,
+  cancelBetNextRound,
+}) => {
   const dispatch = useDispatch();
   const {
     betAmt,
@@ -30,10 +36,23 @@ const CrashBet = ({ sendMyBet, cashOut }) => {
           <p>@ {crashAtNo}x</p>
         </button>
       ) : gameRunning ? (
-        <button className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'>
-          <p className='-mb-0.5'>Bet</p>
-          <p>Next Round</p>
-        </button>
+        bettingNextRound ? (
+          <button
+            className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
+            onClick={cancelBetNextRound}
+          >
+            <p className='-mb-0.5'>Loading...</p>
+            <p>(cancel)</p>
+          </button>
+        ) : (
+          <button
+            className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'
+            onClick={sendBetNextRound}
+          >
+            <p className='-mb-0.5'>Bet</p>
+            <p>Next Round</p>
+          </button>
+        )
       ) : canBet && betting ? (
         <button className='bg-orange-500 py-2 px-5 rounded-full child:text-base child:font-semibold w-72'>
           <p className='text-xl py-2.5'>Loading...</p>
@@ -51,7 +70,7 @@ const CrashBet = ({ sendMyBet, cashOut }) => {
         <span className='text-white opacity-80 ml-4'>Bet range: 1 - 2000</span>
         <div className='relative w-72 mt-0.5 mb-0.5'>
           <input
-            disabled={betting}
+            disabled={betting || bettingNextRound}
             type='number'
             className={`bg-slate-800 p-2 rounded-full w-full pl-4 font-semibold disabled:opacity-75`}
             value={betAmt}
@@ -67,7 +86,7 @@ const CrashBet = ({ sendMyBet, cashOut }) => {
           />
           <div className='flex gap-0.5 child:bg-slate-600 absolute right-0 top-0 bottom-0 child:px-4 py-0.5 pr-0.5 child:font-semibold'>
             <button
-              disabled={betting}
+              disabled={betting || bettingNextRound}
               className='rounded-l-full'
               onClick={() => {
                 betAmt === 2000 || betAmt * 2 > 2000
@@ -78,7 +97,7 @@ const CrashBet = ({ sendMyBet, cashOut }) => {
               x2
             </button>
             <button
-              disabled={betting}
+              disabled={betting || bettingNextRound}
               onClick={() => {
                 betAmt === 1 || betAmt / 2 < 1
                   ? dispatch(changeBetAmt({ betAmt: parseFloat(1) }))
@@ -88,7 +107,7 @@ const CrashBet = ({ sendMyBet, cashOut }) => {
               /2
             </button>
             <button
-              disabled={betting}
+              disabled={betting || bettingNextRound}
               className='rounded-r-full'
               onClick={() => setSlider((prev) => !prev)}
             >
@@ -103,7 +122,7 @@ const CrashBet = ({ sendMyBet, cashOut }) => {
         >
           <span>Min</span>
           <input
-            disabled={betting}
+            disabled={betting || bettingNextRound}
             type='range'
             style={{ transform: "translateY(1px)" }}
             min={1}

@@ -117,13 +117,22 @@ const MinesBet = ({ sendMyBet, cashOutAmt }) => {
         )}
       </div>
       {betting ? (
-        <button
-          className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
-          onClick={cashOutAmt}
-        >
-          <p>Cash Out</p>
-          <p>{cashoutAt.toFixed(2)}</p>
-        </button>
+        cashoutAt === betAmt ? (
+          <button
+            disabled={true}
+            className=' disabled:opacity-70 cursor-not-allowed bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
+          >
+            <p className='text-xl font-semibold '>Cash out</p>
+          </button>
+        ) : (
+          <button
+            onClick={cashOutAmt}
+            className='disabled:opacity-75 bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'
+          >
+            <p className='text-xl font-semibold'>Cash Out</p>
+            <p className='text-xl font-semibold'>{cashoutAt.toFixed(2)}</p>
+          </button>
+        )
       ) : (
         <button
           className='bg-orange-500 py-2 px-5 rounded-full text-lg py-4 font-semibold w-72'

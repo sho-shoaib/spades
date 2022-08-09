@@ -70,9 +70,9 @@ let i = 1;
 // Crash
 const startGame = () => {
   gameStart = true;
-  var seed = "9ed62d41d4a5b0dbf2c0d626bb78ad286431342adac221099a2eae33353f30a9";
+  var seed = makeid(20);
   var salt = Math.random().toString().slice(2, -1);
-  var crashAt = crashResFinder(seed);
+  var crashAt = crashResFinder(seed, salt);
   console.log(crashAt);
   i = 1;
   function myLoop() {
@@ -363,29 +363,34 @@ io.on("connection", (socket) => {
         selectedMode
       );
 
-      let bombPositions = [];
+      console.log(resArray, "resArray");
 
-      const getBombPositions = () => {
-        resArray.map((item) => {
-          let total = 0;
-          item.map((no) => {
-            total += no;
-          });
-          let bombPos = totalSumForEasy - total;
-          bombPositions.push(bombPos);
-        });
-      };
-      getBombPositions();
+      // let bombPositions = [];
+
+      // const getBombPositions = () => {
+      //   resArray.map((item) => {
+      //     let total = 0;
+      //     item.map((no) => {
+      //       total += no;
+      //     });
+      //     let bombPos = totalSumForEasy - total;
+      //     bombPositions.push(bombPos);
+      //   });
+      // };
+      // getBombPositions();
 
       const secret = "shoaib";
 
-      let checkWhat = CryptoJS.AES.encrypt(
-        bombPositions.toString(),
-        secret
-      ).toString();
-      console.log(bombPositions);
-      console.log(checkWhat);
-      socket.emit("recieve tower data", checkWhat);
+      // let checkWhat = CryptoJS.AES.encrypt(
+      //   resArray.toString(),
+      //   secret
+      // ).toString();
+      // console.log(checkWhat, "encrypted");
+      // console.log(
+      //   parseInt(CryptoJS.AES.decrypt(checkWhat, "shoaib")),
+      //   "decrypted"
+      // );
+      socket.emit("recieve tower data", resArray);
     }
   );
 

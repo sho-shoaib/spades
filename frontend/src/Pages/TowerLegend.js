@@ -31,7 +31,7 @@ const TowerLegend = ({ setBalance }) => {
 
   const dispatch = useDispatch();
 
-  const { betting, betAmt, loading, cashoutAt, game } = useSelector(
+  const { betting, betAmt, cashoutAt, game, mode } = useSelector(
     (state) => state.towerLegend
   );
 
@@ -60,7 +60,7 @@ const TowerLegend = ({ setBalance }) => {
       socket.emit("get tower data", {
         selectedClientSeed: makeid(15),
         selectedNonce: game,
-        selectedMode: 0,
+        selectedMode: mode,
       });
       socket.on("recieve tower data", (data) => {
         dispatch(changeCheckWhat({ checkWhat: data }));
@@ -83,7 +83,7 @@ const TowerLegend = ({ setBalance }) => {
         <TowerLegendBet sendMyBet={sendMyBet} cashOutAmt={cashOutAmt} />
       </div>
       <div
-        className='bg-slate-600 rounded-r-xl flex justify-center items-center'
+        className='bg-slate-600 rounded-r-xl flex justify-center items-center flex-col'
         style={{ width: "70%" }}
       >
         <TowerLegendPlay sendMyBet={sendMyBet} cashOutAmt={cashOutAmt} />

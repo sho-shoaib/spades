@@ -19,6 +19,8 @@ const Dice = ({ setBalance }) => {
   const userEmail = sessionStorage.useremail;
   const userName = sessionStorage.userName;
 
+  const [rolling, setRolling] = useState(false);
+
   const { betAmt, underNo, cashoutAt, winAmt, game, win } = useSelector(
     (state) => state.dice
   );
@@ -49,9 +51,13 @@ const Dice = ({ setBalance }) => {
         setBalance(data.balance);
       });
     }
+    setTimeout(() => {
+      setRolling(false);
+    }, 1000);
   }, [game]);
 
   const rollTheDice = () => {
+    setRolling(true);
     socket.emit("get dice data", { from: 0, to: underNo, game: game });
     socket.on("recieve dice data", (data) => {
       dispatch(changeWin({ win: data.win }));
@@ -63,7 +69,7 @@ const Dice = ({ setBalance }) => {
   return (
     <div className='flex w-full py-10 px-5 gap-1 h-screen'>
       <div className='bg-slate-700 rounded-l-xl' style={{ width: "30%" }}>
-        <DiceBet rollTheDice={rollTheDice} />
+        <DiceBet rollTheDice={rollTheDice} rolling={rolling} />
       </div>
       <div
         className='bg-slate-600 rounded-r-xl flex justify-center items-center overflow-x-hidden'

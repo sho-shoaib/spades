@@ -36,6 +36,12 @@ const CrashGame = ({ setBalance }) => {
   }, []);
 
   useEffect(() => {
+    if (canBet === true && bettingNextRound === true) {
+      sendMyBet();
+    }
+  }, [canBet]);
+
+  useEffect(() => {
     socket.on("crash_data", (data) => {
       dispatch(changeCrashAtText({ crashAtText: data.curr }));
       dispatch(changeGameEnd({ gameEnd: data.end }));
@@ -70,6 +76,7 @@ const CrashGame = ({ setBalance }) => {
     socket.on("deducted_amt", (data) => {
       setBalance(data.balance);
     });
+    cancelBetNextRound();
   };
 
   const cashOut = (amt, on) => {
@@ -101,13 +108,22 @@ const CrashGame = ({ setBalance }) => {
 
   return (
     <div className='grid grid-cols-2 grid-rows-5 py-10 px-5 w-full gap-5 child:rounded-xl child:p-3 h-screen'>
-      <div className='bg-slate-600 row-span-3'>
+      <div
+        className='bg-slate-600 row-span-3 overflow-hidden'
+        style={{ padding: "0px" }}
+      >
         <CrashGraph />
       </div>
-      <div className='bg-slate-600 row-span-5'>
+      <div
+        className='row-span-5'
+        style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
+      >
         <CrashBetsDisplay />
       </div>
-      <div className='bg-slate-600 row-span-2'>
+      <div
+        className='row-span-2'
+        style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
+      >
         <CrashBet
           sendMyBet={sendMyBet}
           canBet={canBet}
@@ -116,6 +132,7 @@ const CrashGame = ({ setBalance }) => {
           addedToQue={addedToQue}
           cancelBetNextRound={cancelBetNextRound}
           cashedOut={cashedOut}
+          bettingNextRound={bettingNextRound}
         />
       </div>
     </div>

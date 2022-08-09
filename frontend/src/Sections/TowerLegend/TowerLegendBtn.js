@@ -9,42 +9,91 @@ import {
 } from "../../features/towerLegend/towerLegendSlice";
 var CryptoJS = require("crypto-js");
 
-const TowerLegendBtn = ({ rowNo, btnNo, setCurrRow, currRow, cashOutAmt }) => {
+const TowerLegendBtn = ({
+  rowNo,
+  btnNo,
+  setCurrRow,
+  currRow,
+  cashOutAmt,
+  mode,
+}) => {
   const [res, setRes] = useState("slate");
   const dispatch = useDispatch();
 
-  const { cashoutAt, betting, loading, checkWhat, game, betAmt, multipliers } =
-    useSelector((state) => state.towerLegend);
+  const {
+    cashoutAt,
+    betting,
+    loading,
+    checkWhat,
+    game,
+    betAmt,
+    easyMultipliers,
+    mediumMultipliers,
+    hardMultipliers,
+    extremeMultipliers,
+    nightmareMultipliers,
+  } = useSelector((state) => state.towerLegend);
 
   const checkIf = (clickedOn, row) => {
     let checked = 0;
-    if (
-      clickedOn ===
-      parseInt(
-        CryptoJS.AES.decrypt(checkWhat, "shoaib")
-          .toString(CryptoJS.enc.Utf8)
-          .split(",")[row - 1]
-      )
-    ) {
-      dispatch(changeBetting({ betting: false }));
-      setRes("red");
-    } else {
+    if (checkWhat[row - 1].includes(clickedOn)) {
       setCurrRow(currRow - 1);
       setRes("green");
-      dispatch(changeCashoutAt({ cashoutAt: betAmt * multipliers[row] }));
-      if (currRow === 1) {
-        dispatch(changeCashoutAt({ cashoutAt: betAmt * multipliers[1] }));
-        cashOutAmt();
-        dispatch(changeGameEnd({ gameEnd: true }));
+      if (mode === 0) {
+        dispatch(changeCashoutAt({ cashoutAt: betAmt * easyMultipliers[row] }));
+      } else if (mode === row) {
         dispatch(
-          changelooseText({
-            looseText: `Congratulations! You Won ${(
-              betAmt * multipliers[1]
-            ).toFixed(2)}`,
+          changeCashoutAt({ cashoutAt: betAmt * mediumMultipliers[row] })
+        );
+      } else if (mode === 2) {
+        dispatch(changeCashoutAt({ cashoutAt: betAmt * hardMultipliers[row] }));
+      } else if (mode === 3) {
+        dispatch(
+          changeCashoutAt({ cashoutAt: betAmt * extremeMultipliers[row] })
+        );
+      } else if (mode === 4) {
+        dispatch(
+          changeCashoutAt({
+            cashoutAt: betAmt * nightmareMultipliers[row],
           })
         );
       }
+
+      if (currRow === 1) {
+        if (mode === 0) {
+          dispatch(changeCashoutAt({ cashoutAt: betAmt * easyMultipliers[1] }));
+        } else if (mode === 1) {
+          dispatch(
+            changeCashoutAt({ cashoutAt: betAmt * mediumMultipliers[1] })
+          );
+        } else if (mode === 2) {
+          dispatch(changeCashoutAt({ cashoutAt: betAmt * hardMultipliers[1] }));
+        } else if (mode === 3) {
+          dispatch(
+            changeCashoutAt({ cashoutAt: betAmt * extremeMultipliers[1] })
+          );
+        } else if (mode === 4) {
+          dispatch(
+            changeCashoutAt({
+              cashoutAt: betAmt * nightmareMultipliers[1],
+            })
+          );
+        }
+        cashOutAmt();
+        dispatch(changeGameEnd({ gameEnd: true }));
+        // dispatch(
+        //   changelooseText({
+        //     looseText: `Congratulations! You Won ${(
+        //       betAmt * multipliers[1]
+        //     ).toFixed(2)}`,
+        //   })
+        // );
+      }
+    } else {
+      dispatch(changeBetting({ betting: false }));
+      setRes("red");
     }
+    console.log(cashoutAt, clickedOn, checkWhat[row - 1], checkWhat);
   };
 
   useEffect(() => {
