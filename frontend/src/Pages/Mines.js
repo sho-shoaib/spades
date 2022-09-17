@@ -12,7 +12,7 @@ import {
   changeTiles,
   changeTotalProfit,
 } from "../features/mines/minesSlice";
-import minesBg from "../assets/mines/bg_mines.jpg";
+import minesBg from "../assets/mines/mines-bg.png";
 import { rooms } from "../App";
 
 const Mines = ({ setBalance }) => {
@@ -82,12 +82,18 @@ const Mines = ({ setBalance }) => {
 
   return (
     <div className='flex w-full py-10 px-5 gap-1 h-screen'>
-      <div className='bg-slate-700 rounded-l-xl' style={{ width: "30%" }}>
+      <div
+        className=' rounded-l-xl'
+        style={{ width: "30%", backgroundColor: "#17181B" }}
+      >
         <MinesBet sendMyBet={sendMyBet} cashOutAmt={cashOutAmt} />
       </div>
       <div
-        className='bg-slate-600 rounded-r-xl flex justify-center items-center bg-cover'
-        style={{ width: "70%", backgroundImage: `url(${minesBg})` }}
+        className='rounded-r-xl flex justify-center items-center bg-cover'
+        style={{
+          width: "70%",
+          backgroundImage: `url(${minesBg})`,
+        }}
       >
         <MinesPlay />
       </div>

@@ -16,21 +16,23 @@ const CoinFlipPlay = ({ loading }) => {
     (state) => state.coinFlip
   );
   return (
-    <div
-      className='w-full h-full flex items-center'
-      style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
-    >
+    <div className='w-full h-full flex items-center'>
       <div className='flex justify-around w-full'>
         <div
           id='series'
-          className='flex flex-col items-center gap-5 p-12 rounded-2xl border-2 border-white px-16'
+          className='flex flex-col items-center gap-5 justify-center px-14 rounded-2xl border-4 '
+          style={{
+            backgroundColor: "#2A2D33",
+            borderColor: "#48494F",
+            color: "#99A4B0",
+          }}
         >
           <p className='font-bold text-6xl'>{series}</p>
           <p className='text-xl font-semibold'>SERIES</p>
         </div>
         <div
           id='coin'
-          className='relative w-52'
+          className='relative w-52 h-52'
           style={{
             transformStyle: "preserve-3d",
             transform: "rotateY(-1deg)",
@@ -64,9 +66,14 @@ const CoinFlipPlay = ({ loading }) => {
         </div>
         <div
           id='multiplier'
-          className='flex flex-col items-center gap-5 p-10 rounded-2xl border-2 border-white px-5'
+          className='flex flex-col items-center gap-5 justify-center px-7 py-8 rounded-2xl border-4 '
+          style={{
+            backgroundColor: "#2A2D33",
+            borderColor: "#48494F",
+            color: "#99A4B0",
+          }}
         >
-          <p className='font-bold text-6xl'>x{multiplier.toFixed(2)}</p>
+          <p className='font-bold text-5xl'>x{multiplier.toFixed(2)}</p>
           <p className='text-xl font-semibold'>MULTIPLIER</p>
         </div>
       </div>

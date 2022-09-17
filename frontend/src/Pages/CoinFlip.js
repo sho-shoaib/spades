@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { socket } from "../App";
 import CoinFlipBet from "../Sections/CoinFlipBet";
 import CoinFlipPlay from "../Sections/CoinFlipPlay";
-import bg from "../assets/coinFlip/bg_coinFlip.jpg";
+import bg from "../assets/coinFlip/coinFlip-bg.png";
 import { useSelector, useDispatch } from "react-redux";
 import {
   changeBetting,
@@ -85,7 +85,10 @@ const CoinFlip = ({ refreshWallet, setBalance }) => {
 
   return (
     <div className='flex w-full py-10 px-5 gap-1 h-screen'>
-      <div className='bg-slate-700 rounded-l-xl' style={{ width: "30%" }}>
+      <div
+        className='rounded-l-xl'
+        style={{ width: "30%", backgroundColor: "#17181B" }}
+      >
         <CoinFlipBet
           loading={loading}
           setLoading={setLoading}
@@ -95,8 +98,11 @@ const CoinFlip = ({ refreshWallet, setBalance }) => {
         />
       </div>
       <div
-        className='bg-slate-600  rounded-r-xl flex justify-center items-center bg-cover'
-        style={{ width: "70%", backgroundImage: `url(${bg})` }}
+        className='rounded-r-xl flex justify-center items-center bg-cover'
+        style={{
+          width: "70%",
+          backgroundImage: `url(${bg})`,
+        }}
       >
         <CoinFlipPlay loading={loading} />
       </div>

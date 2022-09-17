@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import TowerLegendBtn from "./TowerLegendBtn";
+import towerMainBg from "../../assets/towerLegend/towerMain-bg.png";
 
 const easyarr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const mediumarr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -31,7 +32,7 @@ const TowerLegendPlay = ({ cashOutAmt }) => {
 
   return (
     <div
-      className='flex flex-col bg-slate-900 p-5 gap-2 rounded relative'
+      className='flex flex-col p-5 gap-2 rounded relative'
       style={{ height: "85%" }}
     >
       {(mode === 0
@@ -52,7 +53,10 @@ const TowerLegendPlay = ({ cashOutAmt }) => {
       ).map((no, i) => {
         return (
           <div className='w-full relative rounded-md h-full'>
-            <div className='bg-slate-900 border-t-2 z-10 border-slate-400 absolute w-1/3 left-1/3 -top-6 rounded-t-3xl text-center text-sm py-0.5'>
+            <div
+              className='bg-slate-900 border-t-2 z-10 border-slate-400 absolute w-1/3 left-1/3 -top-6 rounded-t-3xl text-center text-sm py-0.5'
+              style={{ backgroundImage: `url(${towerMainBg})` }}
+            >
               {mode === 0
                 ? // Easy
                   (betAmt * easyMultipliers[no]).toFixed(2)

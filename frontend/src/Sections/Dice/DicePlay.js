@@ -20,7 +20,7 @@ const DicePlay = () => {
   return (
     <div className='w-full flex flex-col items-center gap-10'>
       <div className='slider-wrapper w-9/12'>
-        <div className='slider-handles bg-slate-700 p-7 pb-2 rounded-lg pt-4 relative w-full'>
+        <div className='slider-handles bg-zinc-800 p-7 pb-2 rounded-lg pt-7 relative w-full'>
           <div className='dice-display w-full relative -top-56 -ml-11'>
             <div
               style={{
@@ -120,7 +120,7 @@ const DicePlay = () => {
               </div>
             </div>
           </div>
-          <div className='slider-mark w-full flex justify-between mt-3'>
+          <div className='slider-mark w-full flex justify-between mt-3 child:font-semibold child:text-neutral-300'>
             <span>0</span>
             <span className='translate-x-1'>25</span>
             <span className='translate-x-2'>50</span>

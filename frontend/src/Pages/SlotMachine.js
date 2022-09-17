@@ -76,7 +76,10 @@ const SlotMachine = ({ setBalance }) => {
 
   return (
     <div className='flex w-full py-10 px-5 gap-1 h-screen'>
-      <div className='bg-slate-700 rounded-l-xl' style={{ width: "30%" }}>
+      <div
+        className='rounded-l-xl'
+        style={{ width: "30%", backgroundColor: "#17181B" }}
+      >
         <SlotMachineBet
           sendMyBet={sendMyBet}
           executeCashout={executeCashout}
@@ -84,8 +87,8 @@ const SlotMachine = ({ setBalance }) => {
         />
       </div>
       <div
-        className='bg-slate-600 rounded-r-xl flex flex-col gap-10 justify-center items-center'
-        style={{ width: "70%" }}
+        className='rounded-r-xl flex flex-col gap-10 justify-center items-center'
+        style={{ width: "70%", backgroundColor: "#17181B" }}
       >
         <SlotMachinePlay />
       </div>

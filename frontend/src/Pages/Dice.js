@@ -53,7 +53,7 @@ const Dice = ({ setBalance }) => {
     }
     setTimeout(() => {
       setRolling(false);
-    }, 1000);
+    }, 300);
   }, [game]);
 
   const rollTheDice = () => {
@@ -68,12 +68,15 @@ const Dice = ({ setBalance }) => {
 
   return (
     <div className='flex w-full py-10 px-5 gap-1 h-screen'>
-      <div className='bg-slate-700 rounded-l-xl' style={{ width: "30%" }}>
+      <div
+        className='rounded-l-xl'
+        style={{ width: "30%", backgroundColor: "#17181B" }}
+      >
         <DiceBet rollTheDice={rollTheDice} rolling={rolling} />
       </div>
       <div
-        className='bg-slate-600 rounded-r-xl flex justify-center items-center overflow-x-hidden'
-        style={{ width: "70%" }}
+        className='rounded-r-xl flex justify-center items-center overflow-x-hidden'
+        style={{ width: "70%", backgroundColor: "#17181B" }}
       >
         <DicePlay />
       </div>

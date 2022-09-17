@@ -7,7 +7,8 @@ import {
   changeTotalProfit,
   changeNextProfit,
 } from "../../features/mines/minesSlice";
-import minesMine from "../../assets/mines/mines_mine.png";
+import diamond from "../../assets/mines/mines_diamond.png";
+import bomb from "../../assets/mines/bomb.png";
 var CryptoJS = require("crypto-js");
 
 const multipliers = [
@@ -63,15 +64,17 @@ const MinesBtn = ({ i }) => {
   return (
     <button
       className={` w-24 h-20 m-auto rounded-md cursor-pointer hover:-translate-y-0.5   ${
-        res === "slate" && "hover:bg-yellow-700"
+        res === "slate" && "hover:bg-zinc-700"
       } active:translate-y-0 disabled:hover:translate-y-0  ${
-        res === "slate" && "disabled:hover:bg-yellow-900"
-      } disabled:cursor-not-allowed
+        res === "slate" && "disabled:hover:bg-zinc-700"
+      } disabled:cursor-default
            ${
-             res === "slate" && "bg-yellow-900"
-           } border-2 border-yellow-600 bg-contain bg-center bg-no-repeat`}
+             res === "slate" && "bg-zinc-800"
+           } bg-contain bg-center bg-no-repeat`}
       style={{
-        backgroundImage: res === "red" && `url(${minesMine})`,
+        backgroundImage:
+          (res === "red" && `url(${bomb})`) ||
+          (res === "green" && `url(${diamond})`),
       }}
       disabled={!betting || btnSelected}
       onClick={() => checkIf(i)}

@@ -9,11 +9,11 @@ const arr = [
 
 const MinesPlay = () => {
   return (
-    <div
-      className='w-full h-full flex justify-center items-center'
-      style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
-    >
-      <div className='grid grid-cols-5 gap-2 p-5 rounded'>
+    <div className='w-full h-full flex justify-center items-center'>
+      <div
+        className='grid grid-cols-5 gap-2 p-5 rounded-lg'
+        style={{ backgroundColor: "#111214" }}
+      >
         {arr.map((no, i) => {
           return <MinesBtn key={i} no={no} i={i} />;
         })}

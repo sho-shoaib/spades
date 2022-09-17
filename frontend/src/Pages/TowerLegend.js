@@ -12,6 +12,8 @@ import {
   changeGame,
   changeCheckWhat,
 } from "../features/towerLegend/towerLegendSlice";
+import towerBg from "../assets/towerLegend/tower_bg.png";
+import towerMainBg from "../assets/towerLegend/towerMain-bg.png";
 import { rooms } from "../App";
 
 function makeid(length) {
@@ -79,13 +81,22 @@ const TowerLegend = ({ setBalance }) => {
 
   return (
     <div className='flex w-full py-10 px-5 gap-1 h-screen'>
-      <div className='bg-slate-700 rounded-l-xl' style={{ width: "30%" }}>
+      <div
+        className='rounded-l-xl'
+        style={{ width: "30%", backgroundColor: "#17181B" }}
+      >
         <TowerLegendBet sendMyBet={sendMyBet} cashOutAmt={cashOutAmt} />
       </div>
       <div
-        className='bg-slate-600 rounded-r-xl flex justify-center items-center flex-col'
-        style={{ width: "70%" }}
+        className='rounded-r-xl flex justify-center items-center flex-col bg-cover bg-center relative'
+        style={{
+          width: "70%",
+          backgroundImage: `url(${towerBg})`,
+        }}
       >
+        <div className='absolute left-0' style={{ width: "83%" }}>
+          <img src={towerMainBg} alt='' className='w-full h-full' />
+        </div>
         <TowerLegendPlay sendMyBet={sendMyBet} cashOutAmt={cashOutAmt} />
       </div>
     </div>
